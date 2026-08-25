@@ -3,3 +3,9 @@ dist/
 .video-analysis-*/
 video_frames_*/
 *.tsbuildinfo
+
+# Local source archives and design references
+source cần để dựng hình/
+nhân vật và hoạt cảnh/
+stitch_reference/
+*.zip

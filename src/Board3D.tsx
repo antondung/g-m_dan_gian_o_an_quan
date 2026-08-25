@@ -7,7 +7,7 @@ import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { assetUrl, O_QUAN_ASSETS } from './game3d/assetRegistry'
 import { BOARD_LAYOUT, tilePosition, type BoardTile } from './game3d/boardLayout'
 import { TERRITORY_SPAWNS } from './game3d/territoryConfig'
-import boardBackground from '../../../nền bàn cờ 1.png'
+import boardBackground from '../nền bàn cờ 1.png'
 
 type Building = 'farm' | 'forest' | 'workshop' | 'barracks' | 'tower'
 export type Cell = { id: number; soldiers: number; building: Building; owner: 'player' | 'enemy' | 'neutral' }
