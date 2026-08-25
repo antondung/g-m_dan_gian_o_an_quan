@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ô QUAN: DỰNG NƯỚC - Main Menu</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700&amp;family=Playfair+Display:wght@700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#ffdbd0",
+                        "tertiary-container": "#3c0000",
+                        "secondary-fixed": "#ffdcc1",
+                        "on-secondary": "#4c2700",
+                        "outline-variant": "#44474d",
+                        "primary-container": "#0a192f",
+                        "on-primary-container": "#74829d",
+                        "on-tertiary-fixed-variant": "#920703",
+                        "surface-variant": "#492e26",
+                        "on-tertiary-container": "#e74b38",
+                        "surface-container-lowest": "#1c0904",
+                        "surface-container": "#311a12",
+                        "background": "#220e07",
+                        "on-tertiary": "#690000",
+                        "tertiary-fixed-dim": "#ffb4a8",
+                        "on-secondary-fixed": "#2e1500",
+                        "on-error": "#690005",
+                        "primary": "#b9c7e4",
+                        "on-primary-fixed": "#0d1c32",
+                        "secondary": "#ffb779",
+                        "on-secondary-fixed-variant": "#6c3a00",
+                        "primary-fixed": "#d6e3ff",
+                        "on-tertiary-fixed": "#410000",
+                        "on-background": "#ffdbd0",
+                        "surface": "#220e07",
+                        "error-container": "#93000a",
+                        "secondary-container": "#955200",
+                        "secondary-fixed-dim": "#ffb779",
+                        "outline": "#8f9097",
+                        "inverse-primary": "#515f78",
+                        "surface-container-low": "#2c160e",
+                        "error": "#ffb4ab",
+                        "on-primary": "#233148",
+                        "tertiary-fixed": "#ffdad4",
+                        "surface-bright": "#4e332a",
+                        "surface-container-highest": "#492e26",
+                        "inverse-on-surface": "#442a22",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-high": "#3d241c",
+                        "tertiary": "#ffb4a8",
+                        "primary-fixed-dim": "#b9c7e4",
+                        "on-secondary-container": "#ffd9bc",
+                        "surface-dim": "#220e07",
+                        "on-surface": "#ffdbd0",
+                        "on-surface-variant": "#c5c6cd",
+                        "on-primary-fixed-variant": "#39475f",
+                        "surface-tint": "#b9c7e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "element-gap-sm": "4px",
+                        "hud-margin": "32px",
+                        "element-gap-md": "12px",
+                        "container-padding": "24px",
+                        "unit": "8px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Playfair Display"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "label-caps": ["Be Vietnam Pro"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "display-hero": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "display-hero": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "900" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .texture-rice-paper {
+            background-image: url('data:image/svg+xml;utf8,<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.05"/></svg>');
+        }
+        .bronze-glow {
+            box-shadow: inset 0 0 10px rgba(255, 183, 121, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden relative min-h-screen">
+<!-- STITCH_SHADER_START:ANIMATION_3 class="absolute inset-0 w-full h-full -z-10" -->
+<div class="absolute inset-0 w-full h-full -z-10" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_3" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_3');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+varying vec2 v_texCoord;
+
+void main() {
+    vec2 uv = v_texCoord;
+    
+    // Deep navy background base
+    vec3 color = vec3(0.039, 0.098, 0.184); // #0a192f
+    
+    // Dynamic organic flow (mist/clouds)
+    float noise = sin(uv.x * 3.0 + u_time * 0.2) * cos(uv.y * 2.0 - u_time * 0.1);
+    noise += sin(uv.y * 5.0 + u_time * 0.3) * cos(uv.x * 4.0 + u_time * 0.2) * 0.5;
+    
+    // Atmospheric golden glow
+    vec3 glowColor = vec3(0.804, 0.498, 0.196); // Bronze gold
+    float glow = smoothstep(0.3, 0.8, noise);
+    
+    color = mix(color, color + glowColor * 0.1, glow);
+    
+    // Subtle vignette
+    float dist = distance(uv, vec2(0.5));
+    color *= 1.0 - smoothstep(0.5, 1.2, dist);
+    
+    gl_FragColor = vec4(color, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_3 -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-hud-margin py-element-gap-md bg-primary-container/85 dark:bg-primary-container/85 border-b border-secondary-container/30 backdrop-blur-md shadow-md">
+<div class="flex items-center gap-gutter">
+<h1 class="font-display-hero text-headline-md text-secondary dark:text-secondary-fixed tracking-tight">Ô QUAN: DỰNG NƯỚC</h1>
+<nav class="hidden md:flex gap-gutter">
+<a class="font-label-caps text-label-caps text-on-primary-container hover:text-secondary-fixed-dim transition-colors" href="#">Lương thực</a>
+<a class="font-label-caps text-label-caps text-on-primary-container hover:text-secondary-fixed-dim transition-colors" href="#">Gỗ</a>
+<a class="font-label-caps text-label-caps text-on-primary-container hover:text-secondary-fixed-dim transition-colors" href="#">Đá</a>
+<a class="font-label-caps text-label-caps text-secondary font-bold border-b-2 border-secondary scale-95 duration-150" href="#">Uy danh</a>
+</nav>
+</div>
+<div class="flex items-center gap-element-md">
+<span class="material-symbols-outlined text-secondary hover:text-secondary-fixed-dim transition-colors cursor-pointer" data-weight="fill" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="material-symbols-outlined text-secondary hover:text-secondary-fixed-dim transition-colors cursor-pointer" data-weight="fill" style="font-variation-settings: 'FILL' 1;">pause_circle</span>
+<img alt="Chân dung Chủ tướng" class="w-10 h-10 rounded-full border border-secondary" data-alt="Portrait of an ancient Vietnamese warlord in heavy bronze armor, dramatic lighting, high quality 3D render, dark fantasy strategy game aesthetic. Warm gold and deep navy tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgjXiTnfxDpcXX6XDqyOUQpYsiYrpyLLhZUqY2WwRlAYLqMGrblTGWVmaTKvEykgd2N0MzDTOCi8p2wbdd-afpzA28K18jOFdonkEv2dinSfaianuOxcvdrv4EL2OkZBt93PZqqV6xFczK6NIcgZfm33qroBBHu7BJ1t8NPpVTTElJNx_7mciHVlpUjp8DUz8E5rBtbnn4DWnKNSWWnzlQBJigVY1_4NPnlqWZ54VTJfnaDPPP5sg"/>
+</div>
+</header>
+<aside class="hidden md:flex fixed left-0 top-0 h-full flex-col p-gutter z-40 docked left-0 h-screen w-72 bg-surface-container dark:bg-surface-container border-r border-secondary-container/50 shadow-xl mt-[72px]">
+<div class="mb-gutter text-center">
+<img alt="Cờ hiệu triều đình" class="w-20 h-20 mx-auto rounded-full border-2 border-secondary mb-element-gap-sm shadow-md" data-alt="An ancient imperial standard or flag with a stylized Vietnamese dragon motif, deeply textured fabric, glowing bronze accents, dark fantasy strategy game UI element." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMXf_8MUhGaD224yne4tSc-XM9H51VR08vxw2Vx5rztI9863G9Vap89stV2Jn2_oAllSxWPAWzds5eFBlKLr2KuP8YHKGjd1c9dXx9sl9Y0Mq0aNml64X4q4SxNsHXOj8NA96kTnyZd-ovbwFOAISbmkpa4-wZxQWTpxtLbaTsk3Gir0hA9UmIui924jBvs1VxUGg0gGXtKIOPHUS69xfqIVXlMf4ukxg5dCAlWMSF2gS4u4VKbTI"/>
+<h2 class="font-headline-md text-secondary">CHIẾN QUỐC</h2>
+<p class="font-body-md text-on-surface-variant">Kỷ nguyên dựng nước</p>
+</div>
+<nav class="flex-1 flex flex-col gap-element-sm">
+<a class="flex items-center gap-element-md p-unit text-on-surface-variant hover:bg-surface-variant/20 transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-headline-md text-body-md">Nhiệm vụ</span>
+</a>
+<a class="flex items-center gap-element-md p-unit bg-secondary-container text-on-secondary-container rounded-lg font-bold translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">fort</span>
+<span class="font-headline-md text-body-md">Đại Thành</span>
+</a>
+<a class="flex items-center gap-element-md p-unit text-on-surface-variant hover:bg-surface-variant/20 transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-headline-md text-body-md">Nhật ký</span>
+</a>
+</nav>
+<button class="mt-auto bg-secondary text-on-secondary font-headline-md text-body-md py-unit px-gutter rounded-lg bronze-glow hover:bg-secondary-fixed-dim transition-colors shadow-lg w-full mb-element-gap-md">
+            Xây dựng
+        </button>
+<div class="border-t border-secondary-container/50 pt-element-gap-md">
+<a class="flex items-center gap-element-md p-unit text-on-surface-variant hover:bg-surface-variant/20 transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-headline-md text-body-md">Cài đặt</span>
+</a>
+</div>
+</aside>
+<main class="md:ml-72 mt-[72px] p-hud-margin max-w-[1200px] mx-auto h-[calc(100vh-72px)] flex flex-col gap-gutter overflow-y-auto">
+<section class="bg-primary-container/60 backdrop-blur-lg border border-secondary-container/50 rounded-xl p-container-padding texture-rice-paper bronze-glow">
+<h2 class="font-headline-lg text-secondary mb-element-gap-sm">TIẾP TỤC DỰNG NƯỚC</h2>
+<div class="flex items-center justify-between">
+<div>
+<p class="font-headline-md text-headline-md text-primary">Màn 01: Mùa Gieo Hạt</p>
+<p class="font-body-md text-on-primary-container">Nhiệm vụ: Tích trữ 1000 Lương thực</p>
+</div>
+<button class="bg-secondary text-on-secondary font-headline-md py-element-gap-md px-container-padding rounded-lg shadow-[0_4px_15px_rgba(0,0,0,0.5)] hover:scale-105 transition-transform flex items-center gap-unit">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                    TIẾN QUÂN
+                </button>
+</div>
+</section>
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter flex-1 min-h-[400px]">
+<div class="relative group cursor-pointer border border-secondary rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-[1.02]">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="A grand, ancient Vietnamese citadel surrounded by lush green rice paddies and distant mountains. Dark fantasy strategy game concept art. Rich bronze and deep green tones." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAW_gz66CBlO9jA1FqeY8k903l0VdmCc9cR2HFaP25KJXMGuLEnXRU7pKTUUhEXNEO7QxKEZMOKIR_6k0nKi2V7gSD1sOLAy2H_6uniOd4R4hJ4RNxv6188k93wmoPwW68SP12cj929BoyUuChAcRoMnzHohD40cAS9hDfH9cE-_RfxnocIqsH3m3SlJBNIi5VdnpwBnfbkNYKczHJgNarAke_oDyDvzeBycipL0Yi0HoAR3xnlBKk')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
+<div class="absolute inset-0 p-container-padding flex flex-col justify-end">
+<h3 class="font-display-hero text-headline-lg text-secondary mb-unit">THỦ THÀNH</h3>
+<p class="font-body-md text-primary">Chế độ chiến dịch chính</p>
+</div>
+</div>
+<div class="relative group border border-outline-variant rounded-xl overflow-hidden opacity-70">
+<div class="absolute inset-0 bg-cover bg-center grayscale filter" data-alt="A vast ancient battlefield in Vietnam, thousands of warriors clashing in the mist. Dark fantasy strategy game concept art. Desaturated, moody tones." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBk6oYEoU45wxABlEIOQPXl_MgAmbnfG_dR7wPfGG3nUm_39mebL2d4jyPskTgtGSmPY4H35vnL-Dp39UD5XtM3XT3y6TCXgSpenurqEPBFDDC_tFIF8HMZ6n0VAWuw6N5ubNkRvHejESeNB8Q6i7jN7QtOnMdklpBkrqxKJf02Kz5zTECK_6_-BxAmj4H8i6tNLLb-QqbuEKWBwvZyt8gZMpmG3HWhL6HgV9sEc_GcWZyaaC3DFYQ')"></div>
+<div class="absolute inset-0 bg-background/80"></div>
+<div class="absolute inset-0 p-container-padding flex flex-col justify-center items-center text-center">
+<span class="material-symbols-outlined text-4xl text-outline-variant mb-unit">lock</span>
+<h3 class="font-headline-md text-headline-md text-outline-variant mb-unit">TRANH HÙNG</h3>
+<p class="font-label-caps text-label-caps text-on-surface-variant border border-outline-variant px-unit py-1 rounded">COMING SOON</p>
+</div>
+</div>
+<div class="relative group border border-outline-variant rounded-xl overflow-hidden opacity-70">
+<div class="absolute inset-0 bg-cover bg-center grayscale filter" data-alt="A strategic map of ancient Vietnam laid out on a lacquered wooden table, illuminated by candlelight. Dark fantasy strategy game UI background. Warm dim lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA6FTMUDoRBTjaeGtE1hYf__6jYYxmiLc6i0mJlCQninzESyiXfS07cpuLyltJKirzyac8IEwzF9VRvtmbVeVF267V_va5hl8ZZLwKob-7OLoBQ8dJ_oVks7mc03Y0N4pRc-R3fAdSM2r_Zvh-n07Qx0DAasipp7JIDhDq3UMScoDAQo2qLsz2gMWcaPK5lYnnQUozSVvGbzDvJKo8vJmmr8OYFOIGwZBoGWEBwfsEPARvfCs6v6yo')"></div>
+<div class="absolute inset-0 bg-background/80"></div>
+<div class="absolute inset-0 p-container-padding flex flex-col justify-center items-center text-center">
+<span class="material-symbols-outlined text-4xl text-outline-variant mb-unit">lock</span>
+<h3 class="font-headline-md text-headline-md text-outline-variant mb-unit">CHIẾN DỊCH</h3>
+<p class="font-label-caps text-label-caps text-on-surface-variant border border-outline-variant px-unit py-1 rounded">COMING SOON</p>
+</div>
+</div>
+</section>
+</main>
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-end px-hud-margin pb-element-gap-md h-24 bg-primary-container/90 dark:bg-primary-container/90 docked full-width bottom-0 rounded-t-full border-t-2 border-secondary-container backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.5)]">
+<a class="flex flex-col items-center justify-center text-on-primary-container p-unit hover:bg-secondary/20 hover:text-secondary font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mb-1">subdirectory_arrow_right</span>
+            Rải Thuận
+        </a>
+<a class="flex flex-col items-center justify-center text-on-primary-container p-unit hover:bg-secondary/20 hover:text-secondary font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mb-1">subdirectory_arrow_left</span>
+            Rải Ngược
+        </a>
+<a class="flex flex-col items-center justify-center bg-secondary text-on-secondary rounded-full p-unit w-16 h-16 shadow-lg transform -translate-y-4 scale-110 duration-200 ease-out font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mb-1">auto_fix_high</span>
+            Trận Pháp
+        </a>
+<a class="flex flex-col items-center justify-center text-on-primary-container p-unit hover:bg-secondary/20 hover:text-secondary font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mb-1">flag</span>
+            Rút Lui
+        </a>
+</nav>
+</body></html>

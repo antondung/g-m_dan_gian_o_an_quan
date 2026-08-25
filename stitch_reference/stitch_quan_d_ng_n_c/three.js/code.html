@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+<!-- STITCH_THREEJS_START:ANIMATION_4 class="fixed inset-0 w-full h-full bg-transparent" -->
+<div class="fixed inset-0 w-full h-full bg-transparent" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_4" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_4');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, (container.clientWidth || window.innerWidth) / (container.clientHeight || window.innerHeight), 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+renderer.setSize(container.clientWidth || window.innerWidth, container.clientHeight || window.innerHeight);
+renderer.shadowMap.enabled = true;
+container.appendChild(renderer.domElement);
+
+// Lighting
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+scene.add(ambientLight);
+const sunLight = new THREE.DirectionalLight(0xffcc88, 1.2);
+sunLight.position.set(10, 20, 10);
+sunLight.castShadow = true;
+scene.add(sunLight);
+
+// Tabletop Board (The Kingdom)
+const boardGeometry = new THREE.BoxGeometry(12, 0.5, 6);
+const boardMaterial = new THREE.MeshPhongMaterial({ color: 0x220e07 }); // Dark surface
+const board = new THREE.Mesh(boardGeometry, boardMaterial);
+board.receiveShadow = true;
+scene.add(board);
+
+// Create Cells (10 small, 2 large)
+const createCell = (x, z, color, label) => {
+    const geometry = new THREE.BoxGeometry(1.8, 0.2, 1.8);
+    const material = new THREE.MeshPhongMaterial({ color: color, transparent: true, opacity: 0.8 });
+    const cell = new THREE.Mesh(geometry, material);
+    cell.position.set(x, 0.36, z);
+    scene.add(cell);
+};
+
+// Player cells (Bottom row)
+for(let i = -2; i <= 2; i++) {
+    createCell(i * 2, 1.2, 0x0277BD); // Deep blue for player
+}
+
+// Enemy cells (Top row)
+for(let i = -2; i <= 2; i++) {
+    createCell(i * 2, -1.2, 0x8B0000); // Earth red for enemy
+}
+
+// Citadel (The 'Quan' cells)
+const createCitadel = (x, color) => {
+    const geometry = new THREE.CylinderGeometry(1.5, 1.5, 1, 32);
+    const material = new THREE.MeshPhongMaterial({ color: color });
+    const citadel = new THREE.Mesh(geometry, material);
+    citadel.position.set(x, 0.5, 0);
+    scene.add(citadel);
+    
+    // Add a simple flag pole
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 2), new THREE.MeshPhongMaterial({color: 0x888888}));
+    pole.position.set(x, 2, 0);
+    scene.add(pole);
+};
+
+createCitadel(-6, 0xCD7F32); // Player Capital (Đại Thành)
+createCitadel(6, 0x8B0000);  // Enemy Capital (Địch Thành)
+
+camera.position.set(0, 10, 8);
+camera.lookAt(0, 0, 0);
+
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+    const w = container.clientWidth || window.innerWidth;
+    const h = container.clientHeight || window.innerHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+});
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_4 -->
+</body>
+</html>

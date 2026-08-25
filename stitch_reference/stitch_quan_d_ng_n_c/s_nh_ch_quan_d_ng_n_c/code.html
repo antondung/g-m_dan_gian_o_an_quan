@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ô QUAN: DỰNG NƯỚC - Landing</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&amp;family=Be+Vietnam+Pro:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#ffdbd0",
+                        "tertiary-container": "#3c0000",
+                        "secondary-fixed": "#ffdcc1",
+                        "on-secondary": "#4c2700",
+                        "outline-variant": "#44474d",
+                        "primary-container": "#0a192f",
+                        "on-primary-container": "#74829d",
+                        "on-tertiary-fixed-variant": "#920703",
+                        "surface-variant": "#492e26",
+                        "on-tertiary-container": "#e74b38",
+                        "surface-container-lowest": "#1c0904",
+                        "surface-container": "#311a12",
+                        "background": "#220e07",
+                        "on-tertiary": "#690000",
+                        "tertiary-fixed-dim": "#ffb4a8",
+                        "on-secondary-fixed": "#2e1500",
+                        "on-error": "#690005",
+                        "primary": "#b9c7e4",
+                        "on-primary-fixed": "#0d1c32",
+                        "secondary": "#ffb779",
+                        "on-secondary-fixed-variant": "#6c3a00",
+                        "primary-fixed": "#d6e3ff",
+                        "on-tertiary-fixed": "#410000",
+                        "on-background": "#ffdbd0",
+                        "surface": "#220e07",
+                        "error-container": "#93000a",
+                        "secondary-container": "#955200",
+                        "secondary-fixed-dim": "#ffb779",
+                        "outline": "#8f9097",
+                        "inverse-primary": "#515f78",
+                        "surface-container-low": "#2c160e",
+                        "error": "#ffb4ab",
+                        "on-primary": "#233148",
+                        "tertiary-fixed": "#ffdad4",
+                        "surface-bright": "#4e332a",
+                        "surface-container-highest": "#492e26",
+                        "inverse-on-surface": "#442a22",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-high": "#3d241c",
+                        "tertiary": "#ffb4a8",
+                        "primary-fixed-dim": "#b9c7e4",
+                        "on-secondary-container": "#ffd9bc",
+                        "surface-dim": "#220e07",
+                        "on-surface": "#ffdbd0",
+                        "on-surface-variant": "#c5c6cd",
+                        "on-primary-fixed-variant": "#39475f",
+                        "surface-tint": "#b9c7e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "element-gap-sm": "4px",
+                        "hud-margin": "32px",
+                        "element-gap-md": "12px",
+                        "container-padding": "24px",
+                        "unit": "8px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Playfair Display"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "label-caps": ["Be Vietnam Pro"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "display-hero": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "display-hero": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "900" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { margin: 0; overflow-x: hidden; }
+        .parallax-wrapper { perspective: 1000px; }
+        .parallax-inner { transition: transform 0.1s ease-out; }
+        .bevel-edge {
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                        inset 0 -2px 4px rgba(0, 0, 0, 0.5),
+                        0 8px 24px rgba(0,0,0,0.5);
+        }
+        .outline-bevel {
+            box-shadow: inset 0 0 0 1px theme('colors.secondary'),
+                        inset 0 0 20px rgba(255, 183, 121, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen relative font-body-md text-body-md overflow-hidden selection:bg-secondary/30 selection:text-secondary">
+<!-- Background Shader -->
+<div class="fixed inset-0 z-0 pointer-events-none opacity-60">
+<!-- STITCH_SHADER_START:ANIMATION_3 class="absolute inset-0 w-full h-full" -->
+<div class="absolute inset-0 w-full h-full" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_3" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_3');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+varying vec2 v_texCoord;
+
+void main() {
+    vec2 uv = v_texCoord;
+    
+    // Deep navy background base
+    vec3 color = vec3(0.039, 0.098, 0.184); // #0a192f
+    
+    // Dynamic organic flow (mist/clouds)
+    float noise = sin(uv.x * 3.0 + u_time * 0.2) * cos(uv.y * 2.0 - u_time * 0.1);
+    noise += sin(uv.y * 5.0 + u_time * 0.3) * cos(uv.x * 4.0 + u_time * 0.2) * 0.5;
+    
+    // Atmospheric golden glow
+    vec3 glowColor = vec3(0.804, 0.498, 0.196); // Bronze gold
+    float glow = smoothstep(0.3, 0.8, noise);
+    
+    color = mix(color, color + glowColor * 0.1, glow);
+    
+    // Subtle vignette
+    float dist = distance(uv, vec2(0.5));
+    color *= 1.0 - smoothstep(0.5, 1.2, dist);
+    
+    gl_FragColor = vec4(color, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_3 -->
+<div class="absolute inset-0 bg-gradient-to-b from-primary-container/80 via-background/90 to-surface-container-lowest/95 mix-blend-multiply"></div>
+</div>
+<!-- Main Content Container (Landing/Splash -> No Global Nav) -->
+<main class="relative z-10 min-h-screen flex flex-col items-center justify-center p-hud-margin parallax-wrapper" id="parallax-container">
+<div class="parallax-inner w-full max-w-4xl flex flex-col items-center gap-12" id="parallax-content">
+<!-- Logo Section -->
+<div class="relative z-20 flex flex-col items-center drop-shadow-2xl">
+<img alt="Ô QUAN: DỰNG NƯỚC Logo" class="h-32 md:h-48 object-contain filter drop-shadow-[0_0_15px_rgba(255,183,121,0.3)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8GVpYF7fdETZBjiAaEuHHzIm3T4V2KZnSNJ-xAOUty6NYBTZtdafGI5RHVDWhmoUA6vExZIwWcEz_SQH1vBcrPrpECwu__5Hegjp-4siaml0dV7e7IU9XbpS5VCcOxp3S1qN7sth7nyCRTYwBS2EsUtQof0b-35ESj20woVcKw4ytiXs-MGO6tYmmHn4utQZigPVsw3pDlTjp5MBrdDCEfVpCEVEXTtFCHXPdR1NwYerysM5MLbY"/>
+<div class="mt-8 text-center space-y-4">
+<h1 class="font-display-hero text-display-hero text-secondary hidden">Ô QUAN: DỰNG NƯỚC</h1>
+<p class="font-headline-lg text-headline-lg md:text-[36px] text-on-surface tracking-wide max-w-2xl mx-auto drop-shadow-md">
+                        "Mỗi nước rải là một mệnh lệnh toàn quốc."
+                    </p>
+</div>
+</div>
+<!-- 3D Hero Element -->
+<div class="relative w-full aspect-[21/9] md:aspect-[16/7] max-w-5xl mx-auto rounded-xl overflow-hidden border border-secondary/20 shadow-[0_20px_50px_rgba(10,25,47,0.8)] bg-surface-container-lowest/50 backdrop-blur-sm group cursor-default">
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent z-10 pointer-events-none"></div>
+<!-- STITCH_THREEJS_START:ANIMATION_4 class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" -->
+<div class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_4" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_4');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, (container.clientWidth || window.innerWidth) / (container.clientHeight || window.innerHeight), 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+renderer.setSize(container.clientWidth || window.innerWidth, container.clientHeight || window.innerHeight);
+renderer.shadowMap.enabled = true;
+container.appendChild(renderer.domElement);
+
+// Lighting
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+scene.add(ambientLight);
+const sunLight = new THREE.DirectionalLight(0xffcc88, 1.2);
+sunLight.position.set(10, 20, 10);
+sunLight.castShadow = true;
+scene.add(sunLight);
+
+// Tabletop Board (The Kingdom)
+const boardGeometry = new THREE.BoxGeometry(12, 0.5, 6);
+const boardMaterial = new THREE.MeshPhongMaterial({ color: 0x220e07 }); // Dark surface
+const board = new THREE.Mesh(boardGeometry, boardMaterial);
+board.receiveShadow = true;
+scene.add(board);
+
+// Create Cells (10 small, 2 large)
+const createCell = (x, z, color, label) => {
+    const geometry = new THREE.BoxGeometry(1.8, 0.2, 1.8);
+    const material = new THREE.MeshPhongMaterial({ color: color, transparent: true, opacity: 0.8 });
+    const cell = new THREE.Mesh(geometry, material);
+    cell.position.set(x, 0.36, z);
+    scene.add(cell);
+};
+
+// Player cells (Bottom row)
+for(let i = -2; i <= 2; i++) {
+    createCell(i * 2, 1.2, 0x0277BD); // Deep blue for player
+}
+
+// Enemy cells (Top row)
+for(let i = -2; i <= 2; i++) {
+    createCell(i * 2, -1.2, 0x8B0000); // Earth red for enemy
+}
+
+// Citadel (The 'Quan' cells)
+const createCitadel = (x, color) => {
+    const geometry = new THREE.CylinderGeometry(1.5, 1.5, 1, 32);
+    const material = new THREE.MeshPhongMaterial({ color: color });
+    const citadel = new THREE.Mesh(geometry, material);
+    citadel.position.set(x, 0.5, 0);
+    scene.add(citadel);
+    
+    // Add a simple flag pole
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 2), new THREE.MeshPhongMaterial({color: 0x888888}));
+    pole.position.set(x, 2, 0);
+    scene.add(pole);
+};
+
+createCitadel(-6, 0xCD7F32); // Player Capital (Đại Thành)
+createCitadel(6, 0x8B0000);  // Enemy Capital (Địch Thành)
+
+camera.position.set(0, 10, 8);
+camera.lookAt(0, 0, 0);
+
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+    const w = container.clientWidth || window.innerWidth;
+    const h = container.clientHeight || window.innerHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+});
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_4 -->
+<!-- Decorative Corner Accents -->
+<div class="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-secondary/50 rounded-tl-sm z-20 pointer-events-none"></div>
+<div class="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-secondary/50 rounded-tr-sm z-20 pointer-events-none"></div>
+<div class="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-secondary/50 rounded-bl-sm z-20 pointer-events-none"></div>
+<div class="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-secondary/50 rounded-br-sm z-20 pointer-events-none"></div>
+</div>
+<!-- Call to Action Actions -->
+<div class="flex flex-col sm:flex-row gap-6 mt-8 z-20 w-full justify-center max-w-lg px-4">
+<button class="flex-1 bg-secondary text-on-secondary font-headline-md text-headline-md py-4 px-8 rounded-lg bevel-edge hover:brightness-110 hover:scale-[1.02] active:scale-95 transition-all duration-200 uppercase tracking-wider relative overflow-hidden group">
+<span class="relative z-10 flex items-center justify-center gap-3">
+                        BẮT ĐẦU DỰNG NƯỚC
+                        <span class="material-symbols-outlined font-variation-settings-'FILL'-1">play_arrow</span>
+</span>
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] pointer-events-none"></div>
+</button>
+<button class="flex-1 bg-primary-container/80 text-secondary border border-secondary/50 font-label-caps text-label-caps py-4 px-8 rounded-lg outline-bevel hover:bg-secondary/10 hover:border-secondary hover:text-secondary-fixed transition-all duration-200 uppercase tracking-widest backdrop-blur-md flex items-center justify-center gap-3">
+<span class="material-symbols-outlined">menu_book</span>
+                    TÌM HIỂU CÁCH CHƠI
+                </button>
+</div>
+</div>
+<!-- Ambient Footer Text -->
+<div class="absolute bottom-6 text-center w-full z-10 text-on-surface-variant/50 font-label-caps text-[10px] tracking-widest uppercase">
+            Phiên bản thử nghiệm Alpha v0.9 • Phát triển bởi Giao Chỉ Studio
+        </div>
+</main>
+<script>
+        // Subtle Parallax Effect for the Landing Screen
+        document.addEventListener('mousemove', (e) => {
+            const container = document.getElementById('parallax-container');
+            const inner = document.getElementById('parallax-content');
+            if(!container || !inner) return;
+
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 50;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 50;
+
+            inner.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        document.getElementById('parallax-container')?.addEventListener('mouseleave', () => {
+            const inner = document.getElementById('parallax-content');
+            if(inner) {
+                inner.style.transform = `rotateY(0deg) rotateX(0deg)`;
+                inner.style.transition = 'transform 0.5s ease-out';
+            }
+        });
+        
+        document.getElementById('parallax-container')?.addEventListener('mouseenter', () => {
+            const inner = document.getElementById('parallax-content');
+            if(inner) {
+                inner.style.transition = 'none';
+            }
+        });
+
+        // Add keyframes for shimmer effect dynamically
+        const styleSheet = document.createElement("style");
+        styleSheet.innerText = `
+            @keyframes shimmer {
+                100% {
+                    transform: translateX(100%);
+                }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+    </script>
+</body></html>

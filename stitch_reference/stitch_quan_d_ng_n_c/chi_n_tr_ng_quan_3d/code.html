@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ô QUAN: DỰNG NƯỚC - Gameplay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700&amp;family=Playfair+Display:wght@700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-surface": "#ffdbd0",
+                      "tertiary-container": "#3c0000",
+                      "secondary-fixed": "#ffdcc1",
+                      "on-secondary": "#4c2700",
+                      "outline-variant": "#44474d",
+                      "primary-container": "#0a192f",
+                      "on-primary-container": "#74829d",
+                      "on-tertiary-fixed-variant": "#920703",
+                      "surface-variant": "#492e26",
+                      "on-tertiary-container": "#e74b38",
+                      "surface-container-lowest": "#1c0904",
+                      "surface-container": "#311a12",
+                      "background": "#220e07",
+                      "on-tertiary": "#690000",
+                      "tertiary-fixed-dim": "#ffb4a8",
+                      "on-secondary-fixed": "#2e1500",
+                      "on-error": "#690005",
+                      "primary": "#b9c7e4",
+                      "on-primary-fixed": "#0d1c32",
+                      "secondary": "#ffb779",
+                      "on-secondary-fixed-variant": "#6c3a00",
+                      "primary-fixed": "#d6e3ff",
+                      "on-tertiary-fixed": "#410000",
+                      "on-background": "#ffdbd0",
+                      "surface": "#220e07",
+                      "error-container": "#93000a",
+                      "secondary-container": "#955200",
+                      "secondary-fixed-dim": "#ffb779",
+                      "outline": "#8f9097",
+                      "inverse-primary": "#515f78",
+                      "surface-container-low": "#2c160e",
+                      "error": "#ffb4ab",
+                      "on-primary": "#233148",
+                      "tertiary-fixed": "#ffdad4",
+                      "surface-bright": "#4e332a",
+                      "surface-container-highest": "#492e26",
+                      "inverse-on-surface": "#442a22",
+                      "on-error-container": "#ffdad6",
+                      "surface-container-high": "#3d241c",
+                      "tertiary": "#ffb4a8",
+                      "primary-fixed-dim": "#b9c7e4",
+                      "on-secondary-container": "#ffd9bc",
+                      "surface-dim": "#220e07",
+                      "on-surface": "#ffdbd0",
+                      "on-surface-variant": "#c5c6cd",
+                      "on-primary-fixed-variant": "#39475f",
+                      "surface-tint": "#b9c7e4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "element-gap-sm": "4px",
+                      "hud-margin": "32px",
+                      "element-gap-md": "12px",
+                      "container-padding": "24px",
+                      "unit": "8px",
+                      "gutter": "16px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Playfair Display"
+                      ],
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-caps": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-lg": [
+                              "Playfair Display"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-lg-mobile": [
+                              "Playfair Display"
+                      ],
+                      "display-hero": [
+                              "Playfair Display"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-hero": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "900"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        /* Custom styles for specific game UI elements that Tailwind utility classes don't easily cover perfectly */
+        .bronze-border {
+            border: 2px solid theme('colors.secondary-container');
+            box-shadow: inset 0 0 10px rgba(149, 82, 0, 0.3);
+        }
+        .bamboo-frame {
+            border: 4px solid #6b8e23; /* Representing bamboo */
+            border-radius: 4px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .bronze-gradient {
+            background: linear-gradient(135deg, theme('colors.secondary-container') 0%, theme('colors.secondary') 50%, theme('colors.secondary-container') 100%);
+        }
+        .hud-panel {
+            background-color: rgba(10, 25, 47, 0.85); /* primary-container with opacity */
+            backdrop-filter: blur(10px);
+            border: 1px solid theme('colors.secondary-container');
+        }
+        
+        /* Subtle glow for interactive elements */
+        .glow-hover:hover {
+            box-shadow: 0 0 15px theme('colors.secondary');
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background h-screen w-screen overflow-hidden font-body-md relative">
+<!-- 3D Environment Background / Center Stage -->
+<div class="absolute inset-0 z-0">
+<!-- The main 3D board placeholder -->
+<!-- STITCH_THREEJS_START:ANIMATION_4 class="absolute inset-0 w-full h-full" -->
+<div class="absolute inset-0 w-full h-full" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_4" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_4');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, (container.clientWidth || window.innerWidth) / (container.clientHeight || window.innerHeight), 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+renderer.setSize(container.clientWidth || window.innerWidth, container.clientHeight || window.innerHeight);
+renderer.shadowMap.enabled = true;
+container.appendChild(renderer.domElement);
+
+// Lighting
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+scene.add(ambientLight);
+const sunLight = new THREE.DirectionalLight(0xffcc88, 1.2);
+sunLight.position.set(10, 20, 10);
+sunLight.castShadow = true;
+scene.add(sunLight);
+
+// Tabletop Board (The Kingdom)
+const boardGeometry = new THREE.BoxGeometry(12, 0.5, 6);
+const boardMaterial = new THREE.MeshPhongMaterial({ color: 0x220e07 }); // Dark surface
+const board = new THREE.Mesh(boardGeometry, boardMaterial);
+board.receiveShadow = true;
+scene.add(board);
+
+// Create Cells (10 small, 2 large)
+const createCell = (x, z, color, label) => {
+    const geometry = new THREE.BoxGeometry(1.8, 0.2, 1.8);
+    const material = new THREE.MeshPhongMaterial({ color: color, transparent: true, opacity: 0.8 });
+    const cell = new THREE.Mesh(geometry, material);
+    cell.position.set(x, 0.36, z);
+    scene.add(cell);
+};
+
+// Player cells (Bottom row)
+for(let i = -2; i <= 2; i++) {
+    createCell(i * 2, 1.2, 0x0277BD); // Deep blue for player
+}
+
+// Enemy cells (Top row)
+for(let i = -2; i <= 2; i++) {
+    createCell(i * 2, -1.2, 0x8B0000); // Earth red for enemy
+}
+
+// Citadel (The 'Quan' cells)
+const createCitadel = (x, color) => {
+    const geometry = new THREE.CylinderGeometry(1.5, 1.5, 1, 32);
+    const material = new THREE.MeshPhongMaterial({ color: color });
+    const citadel = new THREE.Mesh(geometry, material);
+    citadel.position.set(x, 0.5, 0);
+    scene.add(citadel);
+    
+    // Add a simple flag pole
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 2), new THREE.MeshPhongMaterial({color: 0x888888}));
+    pole.position.set(x, 2, 0);
+    scene.add(pole);
+};
+
+createCitadel(-6, 0xCD7F32); // Player Capital (Đại Thành)
+createCitadel(6, 0x8B0000);  // Enemy Capital (Địch Thành)
+
+camera.position.set(0, 10, 8);
+camera.lookAt(0, 0, 0);
+
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+    const w = container.clientWidth || window.innerWidth;
+    const h = container.clientHeight || window.innerHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+});
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_4 -->
+<!-- Overlay elements directly on the board -->
+<div class="absolute inset-0 pointer-events-none flex items-center justify-center">
+<!-- Example of a floating label on a territory -->
+<div class="absolute top-1/3 left-1/4 bg-surface-container/90 bronze-border px-4 py-2 rounded shadow-lg pointer-events-auto glow-hover transition-transform transform hover:scale-110 cursor-pointer">
+<span class="font-headline-md text-headline-md text-secondary block">🌾 Ruộng lúa</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant block text-center">07 Người</span>
+</div>
+<div class="absolute bottom-1/3 right-1/4 bg-surface-container/90 bronze-border px-4 py-2 rounded shadow-lg pointer-events-auto glow-hover transition-transform transform hover:scale-110 cursor-pointer">
+<span class="font-headline-md text-headline-md text-secondary block">🪵 Rừng Trúc</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant block text-center">12 Người</span>
+</div>
+</div>
+</div>
+<!-- TOP HUD -->
+<!-- Applying style_shell_layout from TopAppBar JSON -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-hud-margin py-element-gap-md bg-primary-container/85 dark:bg-primary-container/85 border-b border-secondary-container/30 backdrop-blur-md shadow-md">
+<!-- Brand Logo -->
+<div class="flex items-center gap-4">
+<h1 class="font-display-hero text-headline-md text-secondary dark:text-secondary-fixed tracking-tight">Ô QUAN: DỰNG NƯỚC</h1>
+</div>
+<!-- Resources -->
+<div class="flex gap-6 items-center">
+<!-- Rice -->
+<div class="flex items-center gap-2" title="Lương thực">
+<span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings: 'FILL' 1;">agriculture</span>
+<div class="bamboo-frame w-24 h-4 bg-surface-container-highest relative overflow-hidden">
+<div class="absolute top-0 left-0 h-full bg-green-600" style="width: 75%;"></div>
+</div>
+<span class="font-label-caps text-label-caps text-on-primary-container">4/6</span>
+</div>
+<!-- Wood -->
+<div class="flex items-center gap-2" title="Gỗ">
+<span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings: 'FILL' 1;">forest</span>
+<div class="bamboo-frame w-24 h-4 bg-surface-container-highest relative overflow-hidden">
+<div class="absolute top-0 left-0 h-full bg-amber-700" style="width: 40%;"></div>
+</div>
+<span class="font-label-caps text-label-caps text-on-primary-container">120</span>
+</div>
+<!-- Stone -->
+<div class="flex items-center gap-2" title="Đá">
+<span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings: 'FILL' 1;">landscape</span>
+<div class="bamboo-frame w-24 h-4 bg-surface-container-highest relative overflow-hidden">
+<div class="absolute top-0 left-0 h-full bg-gray-500" style="width: 20%;"></div>
+</div>
+<span class="font-label-caps text-label-caps text-on-primary-container">50</span>
+</div>
+<!-- Prestige -->
+<div class="flex items-center gap-2" title="Uy danh">
+<span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+<span class="font-headline-md text-headline-md text-secondary">450</span>
+</div>
+</div>
+<!-- Turn Info & Actions -->
+<div class="flex items-center gap-6">
+<div class="text-right">
+<div class="font-headline-md text-headline-md text-secondary">Lượt 06</div>
+<div class="font-label-caps text-label-caps text-error">Công thành: 02 lượt</div>
+</div>
+<button class="p-2 rounded-full hover:bg-surface-variant/20 transition-colors text-secondary">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-variant/20 transition-colors text-secondary">
+<span class="material-symbols-outlined">pause_circle</span>
+</button>
+<img alt="Chân dung Chủ tướng" class="w-12 h-12 rounded-full border-2 border-secondary object-cover" data-alt="Chân dung Chủ tướng, phong cách minh họa chiến thuật lịch sử Việt Nam, ánh sáng kịch tính, chi tiết cao cấp, màu sắc trầm ấm, viền vàng đồng." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNCFqmUiOEqSvKveYvrfQSqbJROYed9VNQj_2HRddmm5oXLVSMqebwyv3pv5E1mVK4YE2cifeBF5D2341YIh2OK4HeCq-iJNMshJWvHnaA2L01ZmxnMXKVdA_7tCCSnkVYCJdeuyRQG-YnrDNocXfSIZDATZ8VkGfji3C4-gDMg3oslB10Rry11QB48jb2TAUnY7HgjnqObN4dun26qcDm5hCn8HauS_PAqfV83CbYq5rtSo6zCMQ"/>
+</div>
+</header>
+<!-- LEFT PANEL: Missions & Objectives -->
+<aside class="fixed left-0 top-24 bottom-24 w-72 hud-panel flex flex-col p-container-padding m-hud-margin rounded-lg z-40 overflow-y-auto">
+<h2 class="font-headline-lg text-headline-lg text-secondary mb-6 border-b border-secondary-container/50 pb-2">Nhiệm vụ</h2>
+<div class="space-y-4">
+<!-- Active Mission -->
+<div class="bg-surface-container/50 p-4 rounded border border-secondary-container/30 relative">
+<div class="absolute top-0 left-0 w-1 h-full bg-secondary"></div>
+<h3 class="font-headline-md text-headline-md text-secondary-fixed mb-2">Tích cốc phòng cơ</h3>
+<p class="font-body-md text-body-md text-on-primary-container mb-3">Thu thập đủ lương thực trước mùa đông.</p>
+<div class="flex justify-between items-center font-label-caps text-label-caps mb-1 text-on-surface-variant">
+<span>Lương thực</span>
+<span>4/6</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary" style="width: 66%;"></div>
+</div>
+</div>
+<!-- Pending Mission -->
+<div class="bg-surface-container/20 p-4 rounded border border-surface-container-highest opacity-70">
+<h3 class="font-headline-md text-headline-md text-on-surface-variant mb-2">Mở rộng bờ cõi</h3>
+<p class="font-body-md text-body-md text-on-primary-container">Chiếm lĩnh 3 ô Thủy Quan.</p>
+</div>
+</div>
+</aside>
+<!-- RIGHT PANEL: State & Logs -->
+<aside class="fixed right-0 top-24 bottom-24 w-80 hud-panel flex flex-col p-container-padding m-hud-margin rounded-lg z-40 overflow-y-auto">
+<!-- Citadel State -->
+<div class="mb-8">
+<h2 class="font-headline-lg text-headline-lg text-secondary mb-4 border-b border-secondary-container/50 pb-2">Đại Thành</h2>
+<div class="flex items-center gap-4 mb-4">
+<span class="material-symbols-outlined text-4xl text-secondary">fort</span>
+<div class="flex-1">
+<div class="flex justify-between font-label-caps text-label-caps text-on-surface-variant mb-1">
+<span>Độ bền (HP)</span>
+<span class="text-error">82/100</span>
+</div>
+<div class="w-full h-3 bg-surface-container-highest rounded-full overflow-hidden border border-secondary-container/30">
+<div class="h-full bg-error" style="width: 82%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Battle Log -->
+<div class="flex-1 flex flex-col min-h-0">
+<h2 class="font-headline-md text-headline-md text-secondary mb-4">Nhật ký</h2>
+<div class="flex-1 overflow-y-auto space-y-3 font-body-md text-body-md text-on-primary-container pr-2">
+<p><span class="text-secondary font-bold">[Lượt 5]</span> Quân ta thu hoạch 2 Lương thực từ Ruộng Lúa phía Nam.</p>
+<p><span class="text-error font-bold">[Lượt 5]</span> Giặc cỏ tấn công Đại Thành, mất 5 HP.</p>
+<p><span class="text-secondary font-bold">[Lượt 4]</span> Xây dựng thành công Chòi Canh tại Thủy Quan.</p>
+<p class="opacity-50"><span class="text-secondary font-bold">[Lượt 4]</span> Rải thuận 5 quân.</p>
+<p class="opacity-50"><span class="text-secondary font-bold">[Lượt 3]</span> Phát lệnh chiêu mộ.</p>
+</div>
+</div>
+</aside>
+<!-- BOTTOM COMMAND BAR -->
+<!-- Integrating BottomNavBar JSON logic -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-center items-end px-hud-margin pb-element-gap-md h-32 bg-primary-container/90 dark:bg-primary-container/90 border-t-2 border-secondary-container backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.5)] rounded-t-[2rem]">
+<div class="flex gap-8 items-center pb-4">
+<!-- Inactive Action: Trận Pháp -->
+<button class="flex flex-col items-center justify-center text-on-primary-container p-unit hover:bg-secondary/20 hover:text-secondary transition-colors w-20">
+<span class="material-symbols-outlined text-3xl mb-1">auto_fix_high</span>
+<span class="font-label-caps text-label-caps">Trận Pháp</span>
+</button>
+<!-- Primary Action (Active): Rải Thuận -->
+<button class="flex flex-col items-center justify-center bronze-gradient text-on-secondary rounded-full p-unit w-24 h-24 shadow-lg transform -translate-y-6 hover:scale-110 duration-200 ease-out border-2 border-secondary-fixed">
+<span class="material-symbols-outlined text-4xl mb-1" style="font-variation-settings: 'FILL' 1;">subdirectory_arrow_right</span>
+<span class="font-label-caps text-label-caps font-bold">Rải Thuận</span>
+</button>
+<!-- Secondary Action: Rải Ngược -->
+<button class="flex flex-col items-center justify-center bg-surface-container-highest text-secondary rounded-full p-unit w-20 h-20 shadow-md transform -translate-y-2 hover:bg-surface-variant/80 hover:scale-105 duration-200 border border-secondary-container">
+<span class="material-symbols-outlined text-3xl mb-1">subdirectory_arrow_left</span>
+<span class="font-label-caps text-label-caps">Rải Ngược</span>
+</button>
+<!-- Inactive Action: Rút Lui -->
+<button class="flex flex-col items-center justify-center text-error p-unit hover:bg-error/20 transition-colors w-20">
+<span class="material-symbols-outlined text-3xl mb-1">flag</span>
+<span class="font-label-caps text-label-caps">Rút Lui</span>
+</button>
+</div>
+</nav>
+</body></html>

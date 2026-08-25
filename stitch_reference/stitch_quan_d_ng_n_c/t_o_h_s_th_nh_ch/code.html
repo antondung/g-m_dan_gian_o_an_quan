@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ô QUAN: DỰNG NƯỚC - Khởi Tạo Cơ Đồ</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700&amp;family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#ffdbd0",
+                        "tertiary-container": "#3c0000",
+                        "secondary-fixed": "#ffdcc1",
+                        "on-secondary": "#4c2700",
+                        "outline-variant": "#44474d",
+                        "primary-container": "#0a192f",
+                        "on-primary-container": "#74829d",
+                        "on-tertiary-fixed-variant": "#920703",
+                        "surface-variant": "#492e26",
+                        "on-tertiary-container": "#e74b38",
+                        "surface-container-lowest": "#1c0904",
+                        "surface-container": "#311a12",
+                        "background": "#220e07",
+                        "on-tertiary": "#690000",
+                        "tertiary-fixed-dim": "#ffb4a8",
+                        "on-secondary-fixed": "#2e1500",
+                        "on-error": "#690005",
+                        "primary": "#b9c7e4",
+                        "on-primary-fixed": "#0d1c32",
+                        "secondary": "#ffb779",
+                        "on-secondary-fixed-variant": "#6c3a00",
+                        "primary-fixed": "#d6e3ff",
+                        "on-tertiary-fixed": "#410000",
+                        "on-background": "#ffdbd0",
+                        "surface": "#220e07",
+                        "error-container": "#93000a",
+                        "secondary-container": "#955200",
+                        "secondary-fixed-dim": "#ffb779",
+                        "outline": "#8f9097",
+                        "inverse-primary": "#515f78",
+                        "surface-container-low": "#2c160e",
+                        "error": "#ffb4ab",
+                        "on-primary": "#233148",
+                        "tertiary-fixed": "#ffdad4",
+                        "surface-bright": "#4e332a",
+                        "surface-container-highest": "#492e26",
+                        "inverse-on-surface": "#442a22",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-high": "#3d241c",
+                        "tertiary": "#ffb4a8",
+                        "primary-fixed-dim": "#b9c7e4",
+                        "on-secondary-container": "#ffd9bc",
+                        "surface-dim": "#220e07",
+                        "on-surface": "#ffdbd0",
+                        "on-surface-variant": "#c5c6cd",
+                        "on-primary-fixed-variant": "#39475f",
+                        "surface-tint": "#b9c7e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "element-gap-sm": "4px",
+                        "hud-margin": "32px",
+                        "element-gap-md": "12px",
+                        "container-padding": "24px",
+                        "unit": "8px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Playfair Display"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "label-caps": ["Be Vietnam Pro"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "display-hero": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "display-hero": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "900" }]
+                    },
+                    "backgroundImage": {
+                        'bronze-gradient': 'linear-gradient(to right, #955200, #ffb779, #955200)',
+                        'paper-texture': 'url("data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.8\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100\' height=\'100\' filter=\'url(%23noise)\' opacity=\'0.05\'/%3E%3C/svg%3E")',
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .inner-bevel {
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3), inset 0 -2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .inset-well {
+            box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.6), inset 0 1px 3px rgba(0, 0, 0, 0.8);
+        }
+        .dong-son-border {
+            border-image: repeating-linear-gradient(45deg, #ffb779, #ffb779 5px, transparent 5px, transparent 10px) 1;
+            border-width: 2px;
+            border-style: solid;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col justify-center items-center overflow-hidden relative">
+<!-- Background Shader (High opacity for focus) -->
+<div class="absolute inset-0 w-full h-full opacity-30 z-0">
+<!-- STITCH_SHADER_START:ANIMATION_3 class="absolute inset-0 w-full h-full" -->
+<div class="absolute inset-0 w-full h-full" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_3" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_3');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+varying vec2 v_texCoord;
+
+void main() {
+    vec2 uv = v_texCoord;
+    
+    // Deep navy background base
+    vec3 color = vec3(0.039, 0.098, 0.184); // #0a192f
+    
+    // Dynamic organic flow (mist/clouds)
+    float noise = sin(uv.x * 3.0 + u_time * 0.2) * cos(uv.y * 2.0 - u_time * 0.1);
+    noise += sin(uv.y * 5.0 + u_time * 0.3) * cos(uv.x * 4.0 + u_time * 0.2) * 0.5;
+    
+    // Atmospheric golden glow
+    vec3 glowColor = vec3(0.804, 0.498, 0.196); // Bronze gold
+    float glow = smoothstep(0.3, 0.8, noise);
+    
+    color = mix(color, color + glowColor * 0.1, glow);
+    
+    // Subtle vignette
+    float dist = distance(uv, vec2(0.5));
+    color *= 1.0 - smoothstep(0.5, 1.2, dist);
+    
+    gl_FragColor = vec4(color, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_3 -->
+</div>
+<div class="absolute inset-0 bg-background/80 backdrop-blur-sm z-0"></div>
+<!-- Main Container -->
+<main class="relative z-10 w-full max-w-lg px-container-padding">
+<!-- Frame/Card -->
+<div class="bg-primary-container/85 backdrop-blur-md rounded-xl p-8 border border-secondary-container/50 shadow-[0_15px_35px_rgba(0,0,0,0.5)] relative overflow-hidden">
+<!-- Texture overlay -->
+<div class="absolute inset-0 bg-paper-texture opacity-30 pointer-events-none"></div>
+<!-- Header Section -->
+<div class="text-center mb-8 relative z-10">
+<h2 class="font-display-hero text-headline-md md:text-headline-lg text-secondary mb-2 uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">Ô QUAN: DỰNG NƯỚC</h2>
+<div class="h-[2px] w-24 bg-bronze-gradient mx-auto mb-6"></div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-element-gap-md drop-shadow-md">KHỞI TẠO CƠ ĐỒ</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs mx-auto">
+                    Chào mừng Thành chủ, hãy khắc tên hiệu của ngài lên sử sách.
+                </p>
+</div>
+<!-- Form Section -->
+<form class="flex flex-col gap-gutter relative z-10" onsubmit="event.preventDefault();">
+<div class="flex flex-col gap-element-gap-sm">
+<label class="font-label-caps text-label-caps text-secondary-fixed" for="playerName">NHẬP TÊN HIỆU</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant z-10">ink_pen</span>
+<input class="w-full bg-surface-container-highest border-0 inset-well rounded-md py-3 pl-10 pr-4 font-body-md text-body-md text-on-surface placeholder-on-surface-variant/50 focus:ring-2 focus:ring-secondary focus:outline-none transition-shadow" id="playerName" placeholder="Vd: Lê Lợi, Quang Trung..." required="" type="text"/>
+<!-- Stylized corners for input -->
+<div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-secondary/50 pointer-events-none"></div>
+<div class="absolute top-0 right-0 w-2 h-2 border-t border-r border-secondary/50 pointer-events-none"></div>
+<div class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-secondary/50 pointer-events-none"></div>
+<div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-secondary/50 pointer-events-none"></div>
+</div>
+</div>
+<!-- Spacer -->
+<div class="h-4"></div>
+<!-- Primary Action -->
+<button class="group relative w-full bg-bronze-gradient text-on-secondary font-headline-md text-headline-md py-4 rounded-md inner-bevel shadow-[0_4px_15px_rgba(0,0,0,0.5)] hover:brightness-110 active:translate-y-[2px] active:shadow-[0_2px_8px_rgba(0,0,0,0.6)] transition-all overflow-hidden flex justify-center items-center gap-element-gap-md" type="submit">
+<!-- Subtle shimmer effect -->
+<div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
+<span>TẠO HỒ SƠ &amp; BẮT ĐẦU</span>
+<span class="material-symbols-outlined">swords</span>
+</button>
+</form>
+<!-- Decorative Elements -->
+<div class="absolute top-2 left-2 text-secondary/30 pointer-events-none">
+<span class="material-symbols-outlined text-4xl">cloud</span>
+</div>
+<div class="absolute top-2 right-2 text-secondary/30 pointer-events-none scale-x-[-1]">
+<span class="material-symbols-outlined text-4xl">cloud</span>
+</div>
+</div>
+<!-- Footer Note -->
+<div class="mt-element-gap-md text-center">
+<p class="font-body-md text-body-md text-on-surface-variant/60 flex items-center justify-center gap-element-gap-sm">
+<span class="material-symbols-outlined text-[16px]">info</span>
+                Dữ liệu hồ sơ hiện chỉ được lưu trên trình duyệt này.
+            </p>
+</div>
+</main>
+</body></html>
