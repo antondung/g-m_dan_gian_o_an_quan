@@ -7,10 +7,18 @@ import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { assetUrl, O_QUAN_ASSETS } from './game3d/assetRegistry'
 import { BOARD_LAYOUT, tilePosition, type BoardTile } from './game3d/boardLayout'
 import { TERRITORY_SPAWNS } from './game3d/territoryConfig'
+import type { TacticalTrap } from './game3d/advancedGameTypes'
 import boardBackground from '../nền bàn cờ 1.png'
 
 type Building = 'farm' | 'forest' | 'workshop' | 'barracks' | 'tower'
-export type Cell = { id: number; soldiers: number; building: Building; owner: 'player' | 'enemy' | 'neutral' }
+export type Cell = { 
+  id: number; 
+  soldiers: number; 
+  building: Building; 
+  owner: 'player' | 'enemy' | 'neutral';
+  stars?: 1 | 2 | 3;
+  spies?: number;
+}
 
 const dynamic: Record<Building, { role: string; resource: string; action: 'work' | 'train' | 'guard' }> = {
   farm: { role: O_QUAN_ASSETS.characters.farmer, resource: O_QUAN_ASSETS.resources.food, action: 'work' },
@@ -77,18 +85,35 @@ function Actor({
 
   useFrame(({ clock }) => {
     if (!ref.current) return
-    const t = clock.elapsedTime * 2.8 + phase
-    ref.current.position.y = position[1] + Math.abs(Math.sin(t)) * 0.028
-    ref.current.rotation.z = action === 'work' ? Math.sin(t) * 0.08 : 0
+    const t = clock.elapsedTime * 2.5 + phase
+    // Chuyển động nhẹ nhàng của từng nhân vật, không làm nhảy cả ô đất
+    ref.current.position.y = position[1] + Math.abs(Math.sin(t)) * 0.02
+    ref.current.rotation.z = action === 'work' ? Math.sin(t) * 0.05 : 0
     ref.current.rotation.y =
       rotation +
       (enemy ? Math.PI : 0) +
-      (action === 'train' ? Math.sin(t) * 0.1 : action === 'guard' ? Math.sin(t * 0.5) * 0.04 : 0)
+      (action === 'train' ? Math.sin(t) * 0.08 : action === 'guard' ? Math.sin(t * 0.4) * 0.03 : 0)
   })
 
   return (
     <group ref={ref} position={position}>
-      <Model file={file} height={0.65} />
+      {/* Vòng đế nhận diện phe quân cờ: Xanh Hoàng Gia (Ta) / Đỏ Hắc Diện (Địch) */}
+      <mesh position={[0, 0.04, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[0.22, 16]} />
+        <meshStandardMaterial
+          color={enemy ? '#c92a2a' : '#1c7ed6'}
+          emissive={enemy ? '#5c0000' : '#0c325c'}
+          emissiveIntensity={0.6}
+          roughness={0.4}
+        />
+      </mesh>
+      {/* Hào quang nhỏ chân quân */}
+      <mesh position={[0, 0.045, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[0.22, 0.26, 16]} />
+        <meshBasicMaterial color={enemy ? '#ff6b6b' : '#74c0fc'} />
+      </mesh>
+
+      <Model file={file} height={0.68} />
     </group>
   )
 }
@@ -512,12 +537,14 @@ function DanTile({
   selected,
   onSelect,
   onHover,
+  hasTrap,
 }: {
   tile: BoardTile
   cell: Cell
   selected: boolean
   onSelect: (id: number) => void
   onHover?: (id: number | null) => void
+  hasTrap?: boolean
 }) {
   const { scene } = useGLTF(assetUrl(tile.asset))
   const [hover, setHover] = useState(false)
@@ -534,37 +561,81 @@ function DanTile({
       position={tile.position}
       rotation={tile.rotation}
       onClick={click}
-      onPointerOver={(e) => {
-        e.stopPropagation()
-        setHover(true)
-        onHover?.(cell.id)
-      }}
-      onPointerOut={() => {
-        setHover(false)
-        onHover?.(null)
-      }}
     >
+      {/* KHỐI NỀN ĐẤT TĨNH - TUYỆT ĐỐI KHÔNG NHẢY ĐỘNG */}
       <primitive object={root} />
       <TerritoryDetails kind={cell.building} />
 
-      {/* GIẢI PHÁP 3: Lớp phủ và Vòng hào quang nhận diện phe */}
+      {/* Lưới tàng hình bắt sự kiện hover/click riêng biệt */}
+      <mesh
+        position={[0, 0.35, 0]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        onPointerOver={(e) => {
+          e.stopPropagation()
+          setHover(true)
+          onHover?.(cell.id)
+        }}
+        onPointerOut={() => {
+          setHover(false)
+          onHover?.(null)
+        }}
+      >
+        <planeGeometry args={[2.8, 2.4]} />
+        <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+      </mesh>
+
+      {/* HIỂN THỊ CẤP SAO CỦA Ô (★ 1/2/3) */}
+      {(cell.stars || 1) > 1 && (
+        <group position={[0, 1.25, 0]}>
+          <mesh>
+            <cylinderGeometry args={[0.22, 0.22, 0.08, 6]} />
+            <meshStandardMaterial color="#f5be38" metalness={0.8} roughness={0.2} emissive="#f5be38" emissiveIntensity={0.3} />
+          </mesh>
+          <pointLight color="#ffc107" intensity={0.8} distance={1.5} />
+        </group>
+      )}
+
+      {/* HIỂN THỊ QUÂN NỘI GIÁN (NẾU CÓ) */}
+      {(cell.spies || 0) > 0 && (
+        <group position={[-0.45, 0.85, 0.35]}>
+          <mesh>
+            <coneGeometry args={[0.12, 0.3, 5]} />
+            <meshStandardMaterial color="#e64938" emissive="#8b0000" emissiveIntensity={0.5} />
+          </mesh>
+        </group>
+      )}
+
+      {/* HIỂN THỊ BÃI CHÔNG BẪY MỞ (NẾU CÓ) */}
+      {hasTrap && (
+        <group position={[0, 0.35, 0]}>
+          {[-0.2, 0, 0.2].map((ox, idx) => (
+            <mesh key={idx} position={[ox, 0.12, 0]} rotation={[0, 0, (idx - 1) * 0.2]}>
+              <coneGeometry args={[0.06, 0.38, 4]} />
+              <meshStandardMaterial color="#44474d" metalness={0.9} roughness={0.2} />
+            </mesh>
+          ))}
+          <pointLight color="#ff3b30" intensity={1.2} distance={1.8} />
+        </group>
+      )}
+
+      {/* Lớp phủ và Vòng hào quang nhận diện phe: XANH NGỌC (Ta) vs ĐỎ RỰC (Địch) */}
       <mesh position={[0, 0.221, 0]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={1}>
         <planeGeometry args={[2.55, 2.15]} />
         <meshBasicMaterial
-          color={cell.owner === 'player' ? '#2f7d45' : cell.owner === 'enemy' ? '#85452d' : '#68685d'}
+          color={cell.owner === 'player' ? '#1864ab' : cell.owner === 'enemy' ? '#c92a2a' : '#495057'}
           transparent
-          opacity={0.32}
+          opacity={0.38}
           depthWrite={false}
         />
       </mesh>
 
       {/* Vòng viền sáng quanh chân ô theo phe */}
       <mesh position={[0, 0.23, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[1.18, 1.26, 32]} />
+        <ringGeometry args={[1.18, 1.28, 32]} />
         <meshBasicMaterial
-          color={enemy ? '#ff4a38' : '#64dd78'}
+          color={enemy ? '#ff4d4f' : '#4dabf7'}
           transparent
-          opacity={hover ? 0.9 : 0.45}
+          opacity={hover ? 0.95 : 0.55}
         />
       </mesh>
 
@@ -574,7 +645,7 @@ function DanTile({
       {hover && !selected && (
         <mesh position={[0, 0.35, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <ringGeometry args={[1.05, 1.14, 36]} />
-          <meshBasicMaterial color="#ffffff" transparent opacity={0.45} />
+          <meshBasicMaterial color="#ffffff" transparent opacity={0.65} />
         </mesh>
       )}
     </group>
@@ -703,12 +774,30 @@ function BeaconPillar({ enemy }: { enemy: boolean }) {
   )
 }
 
-function QuanTile({ tile, enemy }: { tile: BoardTile; enemy: boolean }) {
+function QuanTile({
+  tile,
+  enemy,
+  onHover,
+}: {
+  tile: BoardTile
+  enemy: boolean
+  onHover?: (id: string | null) => void
+}) {
   const { scene } = useGLTF(assetUrl(tile.asset))
   const root = useMemo(() => scene.clone(true), [scene])
 
   return (
-    <group position={tile.position} rotation={tile.rotation}>
+    <group
+      position={tile.position}
+      rotation={tile.rotation}
+      onPointerOver={(e) => {
+        e.stopPropagation()
+        onHover?.(enemy ? 'enemy' : 'player')
+      }}
+      onPointerOut={() => {
+        onHover?.(null)
+      }}
+    >
       <FortressGround enemy={enemy} />
       <primitive object={root} />
       <FortressAura enemy={enemy} />
@@ -825,7 +914,7 @@ function March({
     const b = new THREE.Vector3(...tilePosition(path[stepIdx + 1]))
 
     ref.current.position.lerpVectors(a, b, t)
-    // Bước nhảy vòng cung parabol rõ nét
+    // Bước nhảy vòng cung parabol rõ nét chỉ cho đơn vị di chuyển (không ảnh hưởng ô đất)
     ref.current.position.y = 0.35 + Math.sin(t * Math.PI) * 0.75
     ref.current.rotation.y = Math.atan2(b.x - a.x, b.z - a.z)
 
@@ -835,6 +924,7 @@ function March({
   })
 
   const remaining = Math.max(1, marchData.totalTroops - currentStep)
+  const isEnemyMarch = path[0] >= 5
 
   return (
     <>
@@ -846,22 +936,42 @@ function March({
 
       {/* Đạo quân đang di chuyển */}
       <group ref={ref}>
+        {/* Vòng đế nhận diện phe của đạo quân đang rải */}
+        <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <circleGeometry args={[0.32, 24]} />
+          <meshStandardMaterial
+            color={isEnemyMarch ? '#c92a2a' : '#1c7ed6'}
+            emissive={isEnemyMarch ? '#5c0000' : '#0c325c'}
+            emissiveIntensity={0.8}
+          />
+        </mesh>
+
         {/* Người lính dẫn đầu */}
         <Actor
-          file={O_QUAN_ASSETS.characters.soldier}
+          file={isEnemyMarch ? O_QUAN_ASSETS.characters.soldier : O_QUAN_ASSETS.characters.soldier}
           action="work"
-          enemy={false}
+          enemy={isEnemyMarch}
           phase={0}
           position={[0, 0, 0]}
         />
-        {/* Cờ lệnh xanh phấp phới */}
-        <Model file={O_QUAN_ASSETS.props.blueFlag} height={0.75} position={[0.25, 0.1, -0.15]} />
+        {/* Cờ lệnh: Đỏ (Địch) / Xanh (Ta) */}
+        <Model
+          file={isEnemyMarch ? O_QUAN_ASSETS.props.redFlag : O_QUAN_ASSETS.props.blueFlag}
+          height={0.85}
+          position={[0.25, 0.1, -0.15]}
+        />
 
-        {/* Bong bóng số lượng quân đang cầm */}
-        <mesh position={[0, 1.15, 0]}>
-          <sphereGeometry args={[0.2, 16, 16]} />
-          <meshBasicMaterial color="#ffd048" />
-        </mesh>
+        {/* Khối huy hiệu đếm số quân trên đầu */}
+        <group position={[0, 1.25, 0]}>
+          <mesh>
+            <sphereGeometry args={[0.22, 16, 16]} />
+            <meshStandardMaterial
+              color={isEnemyMarch ? '#ff4d4f' : '#ffd048'}
+              emissive={isEnemyMarch ? '#8b0000' : '#b38600'}
+              emissiveIntensity={0.4}
+            />
+          </mesh>
+        </group>
       </group>
     </>
   )
@@ -1479,13 +1589,14 @@ function Scene({
   onSiegeDone,
   ambushTarget,
   onAmbushDone,
+  traps,
   controlsRef,
   resetViewKey,
 }: {
   cells: Cell[]
   selected: number | null
   onSelect: (id: number) => void
-  onHover?: (id: number | null) => void
+  onHover?: (id: number | string | null) => void
   marchEvent: MarchEvent | null
   onMarchStep?: (stepIndex: number, tileId: number) => void
   onMarchDone?: () => void
@@ -1493,6 +1604,7 @@ function Scene({
   onSiegeDone?: () => void
   ambushTarget?: number | null
   onAmbushDone?: () => void
+  traps?: TacticalTrap[]
   controlsRef?: React.RefObject<OrbitControlsImpl | null>
   resetViewKey?: number
 }) {
@@ -1551,12 +1663,13 @@ function Scene({
           selected={selected === tile.id}
           onSelect={onSelect}
           onHover={onHover}
+          hasTrap={traps?.some((trap) => trap.tileId === (tile.id as number))}
         />
       ))}
 
       {/* 2 Thành trì Đại Bản Doanh */}
-      <QuanTile tile={BOARD_LAYOUT.find((t) => t.id === 'player')!} enemy={false} />
-      <QuanTile tile={BOARD_LAYOUT.find((t) => t.id === 'enemy')!} enemy />
+      <QuanTile tile={BOARD_LAYOUT.find((t) => t.id === 'player')!} enemy={false} onHover={onHover} />
+      <QuanTile tile={BOARD_LAYOUT.find((t) => t.id === 'enemy')!} enemy={true} onHover={onHover} />
 
       {/* Hoạt cảnh rải quân tuần tự từng bước */}
       {marchEvent && (
@@ -1611,7 +1724,7 @@ export default function Board3D(props: {
   cells: Cell[]
   selected: number | null
   onSelect: (id: number) => void
-  onHover?: (id: number | null) => void
+  onHover?: (id: number | string | null) => void
   marchEvent?: MarchEvent | null
   onMarchStep?: (stepIndex: number, tileId: number) => void
   onMarchDone?: () => void
@@ -1619,6 +1732,7 @@ export default function Board3D(props: {
   onSiegeDone?: () => void
   ambushTarget?: number | null
   onAmbushDone?: () => void
+  traps?: TacticalTrap[]
   controlsRef?: React.RefObject<OrbitControlsImpl | null>
   resetViewKey?: number
 }) {

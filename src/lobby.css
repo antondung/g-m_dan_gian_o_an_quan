@@ -1,0 +1,714 @@
+/* ==========================================================================
+   VIETNAMESE PALACE LOBBY DESIGN SYSTEM (BASED ON GIAO DIỆN ĐẠI SẢNH.PNG)
+   ========================================================================== */
+
+:root {
+  --vn-bg-dark: #1a0f0a;
+  --vn-bg-deep: #20130d;
+  --vn-wood-brown: #3b2115;
+  --vn-bronze: #6e3b1e;
+  --vn-red: #b5241a;
+  --vn-dark-red: #7d1b12;
+  --vn-gold-royal: #d8a13a;
+  --vn-gold-bright: #f2c66d;
+  --vn-parchment: #f3e3bf;
+  --vn-ivory: #fff7e6;
+  --vn-text-main: #f5e6c8;
+  --vn-text-muted: #c6b9a3;
+  --vn-success: #75b85a;
+  --vn-accent: #e5a93f;
+}
+
+/* SCREEN CONTAINER */
+.vn-palace-lobby {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 80px 1fr 58px;
+  background-color: var(--vn-bg-dark);
+  color: var(--vn-text-main);
+  font-family: 'Be Vietnam Pro', sans-serif;
+  user-select: none;
+}
+
+/* ==========================================================================
+   BACKGROUND HERO: CITADEL, SUNSET WARMTH & VIETNAMESE FLAGS
+   ========================================================================== */
+.vn-hero-bg-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.vn-sky-warmth {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 28%, rgba(216, 161, 58, 0.28) 0%, rgba(110, 59, 30, 0.45) 45%, rgba(26, 15, 10, 0.95) 85%),
+              linear-gradient(180deg, rgba(20, 12, 8, 0.6) 0%, rgba(20, 12, 8, 0.2) 35%, rgba(20, 12, 8, 0.92) 100%);
+}
+
+.vn-citadel-backdrop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 100px 48px 0;
+}
+
+/* VIETNAMESE FLAGS ON THE GATES */
+.vn-flag-pole {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  z-index: 1;
+}
+
+.vn-flag-pole.left {
+  left: 20px;
+}
+.vn-flag-pole.right {
+  right: 20px;
+}
+
+.flag-pole-stick {
+  width: 5px;
+  height: 220px;
+  background: linear-gradient(180deg, var(--vn-gold-royal) 0%, #3e2213 100%);
+  border-radius: 3px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+.vn-flag-cloth {
+  width: 72px;
+  height: 48px;
+  background: var(--vn-red);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.5);
+  transform-origin: left top;
+  animation: flagWave 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes flagWave {
+  0% { transform: rotate(0deg) skewY(0deg); }
+  50% { transform: rotate(2deg) skewY(2deg); }
+  100% { transform: rotate(-2deg) skewY(-2deg); }
+}
+
+.vn-star {
+  color: var(--vn-gold-bright);
+  font-size: 26px;
+  line-height: 1;
+  text-shadow: 0 0 6px rgba(242, 198, 109, 0.8);
+}
+
+/* ==========================================================================
+   1. HEADER
+   ========================================================================== */
+.vn-lobby-header {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 36px;
+  background: linear-gradient(180deg, rgba(32, 19, 13, 0.95) 0%, rgba(26, 15, 10, 0.85) 100%);
+  border-bottom: 1.5px solid rgba(216, 161, 58, 0.45);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+}
+
+/* PLAYER CARD */
+.vn-player-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 240px;
+}
+
+.vn-avatar-gold-frame {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--vn-red), var(--vn-wood-brown));
+  border: 2px solid var(--vn-gold-bright);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 14px rgba(216, 161, 58, 0.4);
+}
+
+.avatar-inner-art {
+  font-size: 24px;
+}
+
+.avatar-seal-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background: var(--vn-dark-red);
+  color: var(--vn-gold-bright);
+  border: 1px solid var(--vn-gold-bright);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 4px;
+}
+
+.vn-player-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vn-player-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  color: var(--vn-ivory);
+  letter-spacing: 0.5px;
+}
+
+.vn-player-rank {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--vn-gold-bright);
+}
+
+/* LOGO CENTER */
+.vn-logo-center-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vn-brand-main-logo {
+  height: 62px;
+  width: auto;
+  max-width: 280px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.7));
+  transition: transform 0.2s ease;
+}
+.vn-brand-main-logo:hover {
+  transform: scale(1.03);
+}
+
+/* NAV BUTTONS */
+.vn-lobby-nav-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 240px;
+  justify-content: flex-end;
+}
+
+.vn-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(35, 20, 13, 0.85);
+  border: 1px solid rgba(216, 161, 58, 0.45);
+  border-radius: 12px;
+  padding: 10px 16px;
+  color: var(--vn-text-main);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.vn-nav-btn:hover {
+  background: var(--vn-wood-brown);
+  border-color: var(--vn-gold-bright);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6), 0 0 12px rgba(216, 161, 58, 0.3);
+}
+
+.vn-nav-btn.gold {
+  border-color: var(--vn-gold-bright);
+  color: var(--vn-gold-bright);
+}
+
+.vn-nav-btn.danger {
+  background: rgba(125, 27, 18, 0.6);
+  border-color: rgba(181, 36, 26, 0.6);
+}
+.vn-nav-btn.danger:hover {
+  background: var(--vn-red);
+  border-color: #ff7875;
+}
+
+/* ==========================================================================
+   2. MAIN LOBBY STAGE (3 COLUMNS)
+   ========================================================================== */
+.vn-lobby-stage-layout {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 290px 1fr 320px;
+  gap: 24px;
+  padding: 8px 36px;
+  align-items: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.vn-lobby-stage-layout::-webkit-scrollbar {
+  width: 4px;
+}
+.vn-lobby-stage-layout::-webkit-scrollbar-thumb {
+  background: var(--vn-bronze);
+  border-radius: 4px;
+}
+
+/* LEFT PANEL: NHIỆM VỤ (PARCHMENT / GIẤY DA CỔ) */
+.vn-left-parchment-panel {
+  background: linear-gradient(175deg, rgba(243, 227, 191, 0.96) 0%, rgba(222, 203, 163, 0.98) 100%);
+  border: 2px solid var(--vn-gold-royal);
+  border-radius: 16px;
+  padding: 22px 20px;
+  color: #2b170c;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), inset 0 0 25px rgba(110, 59, 30, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.parchment-header-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1.5px solid rgba(110, 59, 30, 0.3);
+  padding-bottom: 10px;
+}
+
+.parchment-seal-symbol {
+  font-size: 18px;
+  color: var(--vn-red);
+}
+
+.parchment-header-row h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-weight: 900;
+  margin: 0;
+  color: #2b170c;
+  letter-spacing: 0.8px;
+}
+
+.parchment-missions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.vn-mission-parchment-card {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(110, 59, 30, 0.25);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+
+.vn-mission-parchment-card:hover {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: var(--vn-gold-royal);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(60, 30, 15, 0.15);
+}
+
+.mission-icon-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(216, 161, 58, 0.2);
+  border: 1px solid rgba(110, 59, 30, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.mission-text-content h4 {
+  margin: 0 0 3px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #261208;
+}
+
+.mission-text-content p {
+  margin: 0;
+  font-size: 10.5px;
+  line-height: 1.4;
+  color: #5a3822;
+}
+
+/* CENTER HERO: GIANG SƠN HỘI TỤ + BÀN CỜ + CTA */
+.vn-center-hero-showcase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  height: 100%;
+  padding: 10px 0;
+}
+
+.vn-epic-headline-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.vn-epic-kicker {
+  font-size: 11px;
+  letter-spacing: 3.5px;
+  font-weight: 800;
+  color: var(--vn-gold-bright);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.vn-epic-main-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 900;
+  margin: 2px 0;
+  color: var(--vn-ivory);
+  letter-spacing: 1.5px;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9), 0 0 30px rgba(216, 161, 58, 0.35);
+}
+
+.vn-epic-subtitle {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: var(--vn-text-muted);
+  max-width: 480px;
+}
+
+/* BÀN CỜ Ô QUAN CONTAINER */
+.vn-board-isometric-container {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px 0;
+}
+
+.vn-o-an-quan-board-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.85));
+  border-radius: 12px;
+}
+
+.vn-board-glow-accent {
+  position: absolute;
+  width: 70%;
+  height: 60%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(216, 161, 58, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* NÚT CTA CHÍNH LỚN: XUẤT TRẬN NGAY */
+.vn-cta-battle-row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.vn-grand-battle-cta-btn {
+  width: 310px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--vn-dark-red) 0%, var(--vn-red) 50%, #952015 100%);
+  border: 2px solid var(--vn-gold-bright);
+  border-radius: 14px;
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  box-shadow: 0 8px 30px rgba(80, 20, 0, 0.6), 0 0 20px rgba(216, 161, 58, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.vn-grand-battle-cta-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.vn-grand-battle-cta-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  filter: brightness(1.12);
+  box-shadow: 0 16px 45px rgba(181, 36, 26, 0.7), 0 0 35px rgba(242, 198, 109, 0.6);
+  border-color: #fff;
+}
+
+.vn-grand-battle-cta-btn:hover::before {
+  transform: translateX(100%);
+}
+
+.cta-swords-icon {
+  color: var(--vn-gold-bright);
+  filter: drop-shadow(0 0 6px rgba(242, 198, 109, 0.8));
+}
+
+/* RIGHT PANEL: 3 CARDS CHẾ ĐỘ CHƠI */
+.vn-right-modes-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.vn-mode-select-card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(38, 20, 14, 0.9) 0%, rgba(22, 11, 8, 0.96) 100%);
+  border: 1.5px solid rgba(216, 161, 58, 0.4);
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.vn-mode-select-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(216, 161, 58, 0.08) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.vn-mode-select-card:hover {
+  border-color: var(--vn-gold-bright);
+  background: linear-gradient(180deg, rgba(55, 30, 20, 0.95) 0%, rgba(32, 16, 11, 0.98) 100%);
+  transform: translateX(-6px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(216, 161, 58, 0.35);
+}
+
+.vn-mode-select-card:hover::before {
+  opacity: 1;
+}
+
+.mode-left-icon-circle {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(216, 161, 58, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--vn-gold-bright);
+  flex-shrink: 0;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+}
+
+.mode-content-text {
+  flex: 1;
+}
+
+.mode-header-tag {
+  font-size: 8.5px;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  color: var(--vn-gold-bright);
+  background: rgba(216, 161, 58, 0.25);
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.mode-content-text h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--vn-ivory);
+}
+
+.mode-content-text p {
+  margin: 2px 0 0;
+  font-size: 10px;
+  line-height: 1.35;
+  color: var(--vn-text-muted);
+}
+
+.mode-arrow-pointer {
+  color: var(--vn-gold-royal);
+  font-size: 16px;
+  font-weight: 900;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.vn-mode-select-card:hover .mode-arrow-pointer {
+  color: var(--vn-gold-bright);
+  transform: translateX(4px);
+}
+
+/* ==========================================================================
+   3. FOOTER STATUS (TRANSLUCENT & DOCKED CLEANLY TO PREVENT OVERLAPPING)
+   ========================================================================== */
+.vn-lobby-parchment-footer {
+  position: relative;
+  z-index: 25;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 36px;
+  background: linear-gradient(180deg, rgba(28, 15, 10, 0.75) 0%, rgba(16, 9, 6, 0.92) 100%);
+  border-top: 1px solid rgba(216, 161, 58, 0.35);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  color: var(--vn-text-main);
+}
+
+.vn-lobby-parchment-footer:hover {
+  background: linear-gradient(180deg, rgba(38, 20, 13, 0.88) 0%, rgba(22, 12, 8, 0.96) 100%);
+  border-color: var(--vn-gold-bright);
+}
+
+.footer-status-col {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-status-col span {
+  display: block;
+  font-size: 8.5px;
+  letter-spacing: 1px;
+  font-weight: 800;
+  color: var(--vn-gold-bright);
+}
+
+.footer-status-col b {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--vn-ivory);
+}
+
+.network-live-pulse-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--vn-success);
+  box-shadow: 0 0 8px var(--vn-success);
+  animation: pulseGreen 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes pulseGreen {
+  from { opacity: 0.6; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1.15); }
+}
+  letter-spacing: 1px;
+  font-weight: 800;
+  color: #6e3b1e;
+}
+
+.footer-status-col b {
+  font-size: 11.5px;
+  font-weight: 900;
+  color: #261208;
+}
+
+.network-live-pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--vn-success);
+  box-shadow: 0 0 8px var(--vn-success);
+  animation: pulseGreen 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes pulseGreen {
+  from { opacity: 0.6; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1.15); }
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (TABLET & MOBILE)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .vn-palace-lobby {
+    grid-template-rows: auto 1fr auto;
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+  .vn-lobby-stage-layout {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    gap: 20px;
+  }
+  .vn-center-hero-showcase {
+    order: -1;
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .vn-lobby-header {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+  }
+  .vn-lobby-nav-group {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .vn-lobby-stage-layout {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+  .vn-epic-main-title {
+    font-size: 32px;
+  }
+  .vn-grand-battle-cta-btn {
+    width: 100%;
+  }
+  .vn-lobby-parchment-footer {
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+}
