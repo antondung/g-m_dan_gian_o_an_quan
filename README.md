@@ -4,17 +4,16 @@ Game chiến thuật 3D lấy cảm hứng từ trò chơi dân gian **Ô Ăn Qu
 
 ## Tính năng
 
-- Bàn cờ 3D tương tác bằng React Three Fiber.
-- Cơ chế chọn ô, rải quân theo hai hướng và phục kích qua ô trống.
-- Năm loại lãnh thổ: ruộng lúa, rừng tre, xưởng mộc, doanh trại và tháp canh.
-- Hệ thống lương thực, gỗ, đá, quân lực và HP thành trì.
-- **Đại sảnh game (Lobby)**: Giao diện sảnh chờ, ghép trận, phòng chờ PvP/PvE, quản lý trận đấu.
-- **Hệ thống Multiplayer & P2P**: Quản lý phòng chơi, trạng thái người chơi trực tuyến, đồng bộ hóa trận đấu.
-- **Kho tàng Chiến thuật & Kế sách (Tactics System)**: Hệ thống thẻ kế sách dân gian, kích hoạt chiêu thức và chiến thuật đặc biệt.
-- **Âm thanh & Audio Manager 3D**: Bộ hiệu ứng âm thanh phong phú (tiếng rải sỏi, trống trận, tiếng chiêng, nhạc nền không gian).
-- AI đối phương đa cấp độ, hoạt cảnh hành quân, hiệu ứng chiến đấu và nhật ký trận đấu chi tiết.
-- Màn hồ sơ người chơi, bảng xếp hạng, hướng dẫn, nhiệm vụ và HUD responsive.
-- Bộ model GLB đã chuẩn hóa theo hệ trục Y-up cho Three.js.
+- **Bàn cờ 3D tương tác**: Sử dụng Three.js & React Three Fiber với hiệu ứng ánh sáng, mô hình diorama làng quê và thành lũy cổ truyền Việt Nam.
+- **Hệ thống Danh Tướng (Hero System)**: Chọn tướng xuất trận (Trần Hưng Đạo, Quang Trung, Hai Bà Trưng, Lý Thường Kiệt) với bộ nội tại và kỹ năng kích hoạt riêng biệt (Khiên Thiết Giáp 3D, Hành quân thần tốc, Hiệu triệu dân binh, Như Nguyệt trận đồ).
+- **Thần Khí & Cổ Vật (Artifacts System)**: Trang bị bảo vật dân tộc (Trống Đồng Ngọc Lũ, Nỏ Thần Kim Quy, Thuận Thiên Kiếm, Nón Ba Tầm, Bình Gốm Chu Đậu) gia tăng chỉ số và sức mạnh chiến thuật.
+- **Thời Tiết & Mùa Vụ Động (Dynamic Weather)**: Chu kỳ thời tiết biến chuyển theo trận (Trời Quang, Thủy Triều/Mưa Lũ, Sương Mù Chi Lăng, Hạn Hán, Gió Mùa Đông Bắc) ảnh hưởng trực tiếp đến quy luật bàn cờ và hiệu ứng shader 3D.
+- **Chiến Dịch Lịch Sử (Campaign Mode)**: Tái hiện các trận đánh oanh liệt trong sử Việt (Bạch Đằng, Như Nguyệt, Chi Lăng, Ngọc Hồi - Đống Đa) với cốt truyện, boss AI và bản đồ đặc thù.
+- **Thế Cờ & Giải Đố (Puzzle Mode)**: 4 ải thế cờ hiểm hóc thách thức tư duy rải quân với số lượt đi giới hạn.
+- **Cơ chế rải quân Ô Ăn Quan mở rộng**: Rải thuận/nghịch, gom tài nguyên, công thành hãm địch, phục kích đoạt đất và bẫy chông chiến thuật.
+- **Đại sảnh game (Lobby)**: Giao diện sảnh chờ cung điện Đại Việt, bảng vàng danh vọng (Leaderboard), tạo phòng đấu bạn bè (mã 6 số) và đấu xếp hạng toàn quốc.
+- **Âm thanh & Audio Manager**: Hiệu ứng tiếng gõ sỏi đá, mõ làng, trống đồng Đông Sơn, tù và báo động và nhạc nền ngũ cung.
+- **Bộ model 3D chuẩn hóa**: Tối ưu hệ trục Y-up cho Three.js và tương thích WebGL 2.0.
 
 ## Công nghệ
 
