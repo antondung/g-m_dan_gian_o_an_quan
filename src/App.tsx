@@ -1,21 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowLeft,ArrowRight,BookOpen,Castle,ChevronLeft,ChevronRight,Coins,Compass,Flag,Hammer,HelpCircle,LockKeyhole,LogOut,Pause,Play,RotateCcw,Settings,Shield,Sparkles,Sprout,Swords,Target,Trees,Trophy,UserRound,Flame,Zap,Volume2,VolumeX,Music,Users,Copy,Check,Medal } from 'lucide-react'
+import { ArrowLeft,ArrowRight,BookOpen,Castle,ChevronLeft,ChevronRight,Coins,Compass,Flag,Hammer,HelpCircle,LockKeyhole,LogOut,Pause,Play,RotateCcw,Settings,Shield,Sparkles,Sprout,Swords,Target,Trees,Trophy,UserRound,Flame,Zap,Volume2,VolumeX,Music,Users,Copy,Check,Medal,CloudRain,Sun,Wind,Crown } from 'lucide-react'
 import Board3D,{type Cell,type MarchEvent} from './Board3D'
-import type { TacticalTrap, Doctrine } from './game3d/advancedGameTypes'
-import { TACTICAL_COMMANDS, DOCTRINES_INFO } from './game3d/tacticsDatabase'
+import type { TacticalTrap, Doctrine, HeroId, ArtifactId, WeatherType } from './game3d/advancedGameTypes'
+import { TACTICAL_COMMANDS, DOCTRINES_INFO, HEROES_DATABASE, ARTIFACTS_DATABASE, WEATHER_TYPES_INFO, CAMPAIGN_STAGES, PUZZLE_LEVELS } from './game3d/tacticsDatabase'
 import { sound } from './game3d/audioManager'
 import { MultiplayerNetwork, networkManager, type RankTier, type LeaderboardEntry, getRankColor } from './game3d/multiplayerManager'
 import { LobbyPage } from './LobbyPage'
 import brandLogo from '../logo ô quan dựng nước.png'
 
 type Screen='landing'|'profile'|'lobby'|'game'|'pvp_lobby'|'ranked_matchmaking'|'leaderboard'
-type InfoModal='world'|'rules'|'chronicle'|'tactics'|'doctrines'|'settings'|'create_room'|null
+type InfoModal='world'|'rules'|'chronicle'|'tactics'|'doctrines'|'settings'|'create_room'|'hero_detail'|null
 type Resources={food:number;wood:number;stone:number}
 type TurnPhase='player'|'player_marching'|'enemy'|'enemy_marching'|'siege_alert'|'siege_active'
 type CombatBanner={type:'march'|'ambush'|'siege'|'reward'|'ai'|'tactic';title:string;detail:string}
-type GameMode='ai_defense'|'pvp_custom'|'pvp_ranked'
+type GameMode='ai_defense'|'campaign'|'puzzle'|'pvp_custom'|'pvp_ranked'
 
-const initialCells=():Cell[]=>['farm','forest','workshop','barracks','tower','farm','forest','workshop','barracks','tower'].map((building,id)=>({id,soldiers:5,building:building as Cell['building'],owner:id<5?'player':'enemy',stars:1,spies:0}))
+const initialCells=():Cell[]=>['farm','forest','workshop','barracks','tower','farm','forest','workshop','barracks','tower'].map((building,id)=>({id,soldiers:5,building:building as Cell['building'],owner:id<5?'player':'enemy',stars:1,spies:0,shieldTurns:0}))
 const DEFAULT_CELLS:Cell[]=initialCells()
 
 const BUILDING_INFO: Record<Cell['building'], { name: string; icon: string; worker: string; output: string; desc: string }> = {
@@ -109,6 +109,32 @@ function App(){
  const [matchmakingTimer,setMatchmakingTimer]=useState(0);
  const [playerRankProfile,setPlayerRankProfile]=useState(MultiplayerNetwork.getPlayerProfile());
  const [leaderboardData,setLeaderboardData]=useState<LeaderboardEntry[]>([]);
+
+ // HERO, ARTIFACT & WEATHER STATES
+ const [selectedHero, setSelectedHero] = useState<HeroId>('tran_hung_dao');
+ const [enemyHero, setEnemyHero] = useState<HeroId>('ly_thuong_kiet');
+ const [equippedArtifacts, setEquippedArtifacts] = useState<ArtifactId[]>(['trong_dong', 'no_than']);
+ const [currentWeather, setCurrentWeather] = useState<WeatherType>('clear');
+ const [weatherTurnsRemaining, setWeatherTurnsRemaining] = useState(4);
+ const [heroSkillCooldown, setHeroSkillCooldown] = useState(0);
+ const [heroExtraTurn, setHeroExtraTurn] = useState(false);
+
+ // CAMPAIGN & PUZZLE STATES
+ const [activeCampaignStageId, setActiveCampaignStageId] = useState<string>('stage_bach_dang');
+ const [activePuzzleId, setActivePuzzleId] = useState<number | null>(null);
+ const [puzzleTurnsLeft, setPuzzleTurnsLeft] = useState<number>(3);
+
+ const toggleArtifact = (artId: ArtifactId) => {
+   setEquippedArtifacts(prev => {
+     if (prev.includes(artId)) {
+       return prev.filter(id => id !== artId);
+     }
+     if (prev.length >= 2) {
+       return [prev[1], artId];
+     }
+     return [...prev, artId];
+   });
+ };
 
  useEffect(()=>{
    networkManager.setListener((msg)=>{
@@ -279,12 +305,53 @@ function App(){
    const b=cells[tileId].building;
    const star=cells[tileId].stars || 1;
 
+   // Cổ vật Nỏ Thần: Bắn tỉa địch khi địch đi qua Tháp Canh của ta
+   if(!isPlayerTurn && b === 'tower' && cells[tileId].owner === 'player' && equippedArtifacts.includes('no_than')) {
+     setCells(prev => {
+       const next = prev.map(c => ({...c}));
+       if(next[tileId].soldiers > 1) {
+         next[tileId].soldiers -= 1;
+         sound.playWoodBlock();
+       }
+       return next;
+     });
+   }
+
    if(isPlayerTurn){
      let resGain='';
-     const multiplier = star >= 2 ? 2 : 1;
-     if(b==='farm'){setResources(r=>({...r,food:r.food+2*multiplier}));resGain=`🌾 +${2*multiplier} LƯƠNG`;sound.playWoodBlock();}
-     else if(b==='forest'){setResources(r=>({...r,wood:r.wood+2*multiplier}));resGain=`🎋 +${2*multiplier} GỖ`;sound.playWoodBlock();}
-     else if(b==='workshop'){setResources(r=>({...r,stone:r.stone+1*multiplier}));resGain=`🪓 +${1*multiplier} ĐÁ`;sound.playWoodBlock();}
+     let multiplier = star >= 2 ? 2 : 1;
+
+     // Nội tại Hai Bà Trưng: x2 Lương & Gỗ
+     if(selectedHero === 'hai_ba_trung' && (b === 'farm' || b === 'forest')) {
+       multiplier *= 2;
+     }
+
+     // Hiệu ứng Thời tiết: Mưa Lũ x2 Lương, Hạn hán -1 Lương
+     let weatherFoodBonus = 0;
+     if(currentWeather === 'flood' && b === 'farm') weatherFoodBonus = 2;
+     if(currentWeather === 'drought' && b === 'farm') weatherFoodBonus = -1;
+
+     // Cổ vật Trống Đồng: +15% tài nguyên
+     const artBonus = equippedArtifacts.includes('trong_dong') ? 1.15 : 1;
+
+     if(b==='farm'){
+       const addFood = Math.max(1, Math.round((2 * multiplier + weatherFoodBonus) * artBonus));
+       setResources(r=>({...r,food:r.food + addFood}));
+       resGain=`🌾 +${addFood} LƯƠNG`;
+       sound.playWoodBlock();
+     }
+     else if(b==='forest'){
+       const addWood = Math.max(1, Math.round((2 * multiplier) * artBonus));
+       setResources(r=>({...r,wood:r.wood + addWood}));
+       resGain=`🎋 +${addWood} GỖ`;
+       sound.playWoodBlock();
+     }
+     else if(b==='workshop'){
+       const addStone = Math.max(1, Math.round((1 * multiplier) * artBonus));
+       setResources(r=>({...r,stone:r.stone + addStone}));
+       resGain=`🪓 +${addStone} ĐÁ`;
+       sound.playWoodBlock();
+     }
      setMessage(`[Quân ta bước ${stepIndex+1}/${marchEvent?.totalTroops}]: Rải 1 quân xuống [${BUILDING_INFO[b].name} ${star}★] ${resGain ? `➔ ${resGain}` : ''}`);
    } else {
      setMessage(`[Địch bước ${stepIndex+1}/${marchEvent?.totalTroops}]: Địch rải 1 quân xuống [${BUILDING_INFO[b].name}]`);
@@ -303,11 +370,20 @@ function App(){
    const target=(gap+direction+10)%10;
    const opponentOwner = isPlayerTurn ? 'enemy' : 'player';
 
-   if(next[gap].soldiers===0 && next[target].owner===opponentOwner && next[target].soldiers>0){
+   // Kiểm tra Khiên Danh Tướng: Nếu ô mục tiêu có khiên thì miễn nhiễm cướp quân
+   const isTargetShielded = (next[target]?.shieldTurns || 0) > 0;
+
+   if(next[gap].soldiers===0 && next[target].owner===opponentOwner && next[target].soldiers>0 && !isTargetShielded){
      const capturedCount=next[target].soldiers;
      next[target].soldiers=0;
      next[target].owner=isPlayerTurn ? 'player' : 'enemy';
-     const dmg=capturedCount*4;
+     
+     // Hiệu ứng Danh tướng & Cổ vật: Trần Hưng Đạo +2 dmg, Thuận Thiên Kiếm +25% dmg
+     let dmg=capturedCount*4;
+     if(isPlayerTurn) {
+       if(selectedHero === 'tran_hung_dao') dmg += 2;
+       if(equippedArtifacts.includes('thuan_thien_kiem')) dmg = Math.round(dmg * 1.25);
+     }
 
      if(isPlayerTurn){
        setEnemyHp(h=>Math.max(0,h-dmg));
@@ -340,13 +416,44 @@ function App(){
      });
    }
 
+   // Giảm thời gian Khiên danh tướng
+   next.forEach(c => {
+     if (c.shieldTurns && c.shieldTurns > 0) c.shieldTurns -= 1;
+   });
+
    setCells(next);
 
    if(isPlayerTurn){
      setResources(r=>({food:Math.max(0,r.food-2),wood:r.wood,stone:r.stone}));
      setScore(s=>s+5);
 
-     if(gameMode === 'ai_defense') {
+     // Kiểm tra Kỹ năng Quang Trung: Đi thêm 1 lượt ngay
+     if(heroExtraTurn) {
+       setHeroExtraTurn(false);
+       setTurnPhase('player');
+       setMessage('⚡ HÀNH QUÂN THẦN TỐC: Bạn được bốc tiếp 1 ô quân đi thêm lượt!');
+       setCombatBanner({
+         type:'tactic',
+         title:'⚡ HÀNH QUÂN THẦN TỐC!',
+         detail:'Danh tướng Quang Trung thúc quân đi tiếp lượt thứ hai!'
+       });
+       return;
+     }
+
+     if(gameMode === 'ai_defense' || gameMode === 'campaign' || gameMode === 'puzzle') {
+       if(gameMode === 'puzzle') {
+         setPuzzleTurnsLeft(t => {
+           const nextTurns = t - 1;
+           if(nextTurns <= 0 && enemyHp > 0) {
+             setCombatBanner({
+               type:'ai',
+               title:'HẾT LƯỢT ĐI THẾ CỜ!',
+               detail:'Bạn đã dùng hết số lượt giới hạn của thế cờ.'
+             });
+           }
+           return nextTurns;
+         });
+       }
        setTimeout(()=>{
          triggerAiTurn(next);
        },1500);
@@ -450,9 +557,27 @@ function App(){
    const nextRound = round + 1;
    setRound(nextRound);
 
+   // Hồi chiêu kỹ năng tướng
+   if (heroSkillCooldown > 0) setHeroSkillCooldown(c => c - 1);
+
+   // Cập nhật chu kỳ thời tiết mỗi 3-4 hiệp
+   if (weatherTurnsRemaining <= 1) {
+     const weatherPool: WeatherType[] = ['clear', 'flood', 'fog', 'drought', 'gale'];
+     const nextWeather = weatherPool[Math.floor(Math.random() * weatherPool.length)];
+     setCurrentWeather(nextWeather);
+     setWeatherTurnsRemaining(WEATHER_TYPES_INFO[nextWeather].durationTurns);
+     setCombatBanner({
+       type:'reward',
+       title:`${WEATHER_TYPES_INFO[nextWeather].icon} THỜI TIẾT ĐỔI: ${WEATHER_TYPES_INFO[nextWeather].name.toUpperCase()}`,
+       detail: WEATHER_TYPES_INFO[nextWeather].desc
+     });
+   } else {
+     setWeatherTurnsRemaining(t => t - 1);
+   }
+
    const nextCountdown = siegeCountdown - 1;
 
-   if(nextCountdown <= 0 && gameMode === 'ai_defense'){
+   if(nextCountdown <= 0 && (gameMode === 'ai_defense' || gameMode === 'campaign')){
      setSiegeCountdown(3);
      setTurnPhase('siege_alert');
      setTimeout(()=>{
@@ -501,6 +626,60 @@ function App(){
      detail:`Đại Thành vẫn đứng vững! Hãy tiếp tục điều quân tích lương cho đợt vây tiếp theo.`
    });
  }
+
+ const executeHeroSkill=()=>{
+   const hero = HEROES_DATABASE[selectedHero];
+   // Nón Ba Tầm: Giảm 1 điểm tiêu hao Thế Khí
+   const costReduction = equippedArtifacts.includes('non_ba_tam') ? 1 : 0;
+   const finalCost = Math.max(1, hero.skillCost - costReduction);
+
+   if(momentum < finalCost || heroSkillCooldown > 0) return;
+
+   sound.playDongSonDrum();
+   setMomentum(m => m - finalCost);
+   setHeroSkillCooldown(hero.skillCooldown);
+
+   if(selectedHero === 'tran_hung_dao'){
+     const targetTile = selected !== null ? selected : 0;
+     setCells(prev => {
+       const next = prev.map(c => ({...c}));
+       next[targetTile].shieldTurns = 3;
+       return next;
+     });
+     setCombatBanner({
+       type:'tactic',
+       title:`🛡️ HỊCH TƯỚNG SĨ: KHIÊN THIẾT GIÁP`,
+       detail:`Trần Hưng Đạo dựng Khiên Thiết Giáp hộ trì [${BUILDING_INFO[cells[targetTile].building].name}] bất khả xâm phạm trong 3 lượt!`
+     });
+   } else if(selectedHero === 'quang_trung'){
+     setHeroExtraTurn(true);
+     setCombatBanner({
+       type:'tactic',
+       title:`⚡ HÀNH QUÂN THẦN TỐC`,
+       detail:`Hoàng đế Quang Trung phát lệnh thần tốc: Bạn sẽ được bốc quân đi tiếp ngay sau lượt này!`
+     });
+   } else if(selectedHero === 'hai_ba_trung'){
+     setCells(prev => {
+       const next = prev.map(c => ({...c}));
+       for(let i=0; i<5; i++){
+         if(next[i].owner === 'player') next[i].soldiers += 2;
+       }
+       return next;
+     });
+     setCombatBanner({
+       type:'tactic',
+       title:`🥁 TRỐNG ĐỒNG XUNG TRẬN`,
+       detail:`Trưng Nữ Vương hiệu triệu bách tính: Bổ sung ngay +2 quân cho toàn bộ 5 vùng đất quân ta!`
+     });
+   } else if(selectedHero === 'ly_thuong_kiet'){
+     setReverseNextMarch(true);
+     setCombatBanner({
+       type:'tactic',
+       title:`🌊 NHƯ NGUYỆT TRẬN ĐỒ`,
+       detail:`Thái úy Lý Thường Kiệt bày trận đồ trên sông, ép nước đi kế tiếp bị đổi hướng thần sầu!`
+     });
+   }
+ };
 
  const executeTactic=(commandId: string)=>{
    const cmd = TACTICAL_COMMANDS.find(c=>c.id===commandId);
@@ -620,6 +799,58 @@ function App(){
    });
  }
 
+ const startCampaignStage=(stageId: string)=>{
+   const stage = CAMPAIGN_STAGES.find(s=>s.id===stageId) || CAMPAIGN_STAGES[0];
+   setActiveCampaignStageId(stage.id);
+   setGameMode('campaign');
+   setOpponentName(stage.enemyName);
+   setEnemyHero(stage.enemyHero as HeroId);
+   setCurrentWeather(stage.weather);
+   setWeatherTurnsRemaining(WEATHER_TYPES_INFO[stage.weather].durationTurns);
+   setCastleHp(stage.playerBaseHp);
+   setEnemyHp(stage.enemyBaseHp);
+   setResources(stage.initialResources);
+   setRound(1);
+   setTurnPhase(stage.firstMove === 'player' ? 'player' : 'enemy');
+   setCells(initialCells());
+   setScreen('game');
+   setCombatBanner({
+     type:'reward',
+     title:`⚔️ HỒI ${stage.chapter}: ${stage.title.toUpperCase()}`,
+     detail: stage.storyIntro
+   });
+ };
+
+ const startPuzzleStage=(puzzleId: number)=>{
+   const puzzle = PUZZLE_LEVELS.find(p=>p.id===puzzleId) || PUZZLE_LEVELS[0];
+   setActivePuzzleId(puzzle.id);
+   setGameMode('puzzle');
+   setPuzzleTurnsLeft(puzzle.maxTurns);
+   setOpponentName(puzzle.historicalRef);
+   setCastleHp(puzzle.playerHp);
+   setEnemyHp(puzzle.enemyHp);
+   setResources(puzzle.resources);
+   setRound(1);
+   setTurnPhase('player');
+
+   // Khởi tạo bàn cờ theo thế cờ
+   const puzCells: Cell[] = puzzle.initialBoard.soldiers.map((s, id) => ({
+     id,
+     soldiers: s,
+     building: (puzzle.initialBoard.buildings?.[id] || ['farm','forest','workshop','barracks','tower','farm','forest','workshop','barracks','tower'][id]) as Cell['building'],
+     owner: id < 5 ? 'player' : 'enemy',
+     stars: 1,
+     spies: 0,
+   }));
+   setCells(puzCells);
+   setScreen('game');
+   setCombatBanner({
+     type:'reward',
+     title:`🧩 THẾ CỜ: ${puzzle.title.toUpperCase()}`,
+     detail:`Mục tiêu: ${puzzle.objective.label} (Tối đa ${puzzle.maxTurns} lượt)`
+   });
+ };
+
  const reset=()=>{
    setCells(initialCells());
    setSelected(null);
@@ -635,6 +866,9 @@ function App(){
    setCastleHp(100);
    setEnemyHp(100);
    setScore(0);
+   setCurrentWeather('clear');
+   setHeroSkillCooldown(0);
+   setHeroExtraTurn(false);
    setMessage('LƯỢT CỦA BẠN: Hãy chọn một ô quân ta (0 - 4) để ban lệnh.');
    setHistory(['Một vận hội mới bắt đầu.']);
  }
@@ -922,7 +1156,18 @@ function App(){
    <LobbyPage
      profile={profile}
      playerRankProfile={playerRankProfile}
-     onStartCampaign={()=>{setGameMode('ai_defense');enterGame(!localStorage.getItem('oquan-trained'));}}
+     selectedHero={selectedHero}
+     equippedArtifacts={equippedArtifacts}
+     onSelectHero={setSelectedHero}
+     onToggleArtifact={toggleArtifact}
+     onStartCampaign={(stageId)=>{
+       if(stageId) startCampaignStage(stageId);
+       else {
+         setGameMode('ai_defense');
+         enterGame(!localStorage.getItem('oquan-trained'));
+       }
+     }}
+     onStartPuzzle={(puzzleId)=>startPuzzleStage(puzzleId)}
      onOpenPvpLobby={()=>setScreen('pvp_lobby')}
      onStartRanked={startRankedMatchmaking}
      onOpenLeaderboard={openLeaderboard}
@@ -1046,14 +1291,21 @@ function App(){
    </div>
  );
 
- return <main className={`battle screen ${siegeActive ? 'screen-siege-alert' : ''}`}><div className="battle-world"><Board3D cells={cells} selected={selected} onSelect={selectCell} onHover={setHoveredCell} marchEvent={marchEvent} onMarchStep={handleMarchStep} onMarchDone={handleMarchDone} siegeActive={siegeActive} onSiegeDone={handleSiegeDone} ambushTarget={ambushTarget} onAmbushDone={handleAmbushDone} traps={traps} resetViewKey={viewKey}/></div><header className="top-hud hud"><Brand/><div className="resources"><Resource icon={<Sprout/>} label="LƯƠNG" value={resources.food} max={60} color="#6f9339"/><Resource icon={<Trees/>} label="GỖ" value={resources.wood} max={60} color="#a26432"/><Resource icon={<Hammer/>} label="ĐÁ" value={resources.stone} max={60} color="#8c929a"/><div className="resource momentum-resource" title="Thế Khí dùng thi triển Trận Pháp"><Zap color="#ffd048"/><div><span>THẾ KHÍ</span><i><em style={{width:`${Math.min(100,(momentum/10)*100)}%`,background:'linear-gradient(90deg,#d97706,#f59e0b,#fde047)'}}/></i></div><b>{momentum}/10</b></div><div className="prestige"><Coins/><span>UY DANH</span><b>{score}</b></div></div>
+ return <main className={`battle screen ${siegeActive ? 'screen-siege-alert' : ''}`}><div className="battle-world"><Board3D cells={cells} selected={selected} onSelect={selectCell} onHover={setHoveredCell} marchEvent={marchEvent} onMarchStep={handleMarchStep} onMarchDone={handleMarchDone} siegeActive={siegeActive} onSiegeDone={handleSiegeDone} ambushTarget={ambushTarget} onAmbushDone={handleAmbushDone} traps={traps} weather={currentWeather} resetViewKey={viewKey}/></div><header className="top-hud hud"><Brand/><div className="resources"><Resource icon={<Sprout/>} label="LƯƠNG" value={resources.food} max={60} color="#6f9339"/><Resource icon={<Trees/>} label="GỖ" value={resources.wood} max={60} color="#a26432"/><Resource icon={<Hammer/>} label="ĐÁ" value={resources.stone} max={60} color="#8c929a"/><div className="resource momentum-resource" title="Thế Khí dùng thi triển Trận Pháp"><Zap color="#ffd048"/><div><span>THẾ KHÍ</span><i><em style={{width:`${Math.min(100,(momentum/10)*100)}%`,background:'linear-gradient(90deg,#d97706,#f59e0b,#fde047)'}}/></i></div><b>{momentum}/10</b></div><div className="prestige"><Coins/><span>UY DANH</span><b>{score}</b></div></div>
  
  <div className="turn-info">
    <b>HIỆP {String(round).padStart(2,'0')} · {turnPhase==='player'?'LƯỢT QUÂN TA':`LƯỢT ${opponentName.toUpperCase()}`}</b>
-   <span className={siegeCountdown===1?'warning':''}>{gameMode==='ai_defense'?`CÔNG THÀNH: ${siegeCountdown} HIỆP NỮA`:`ĐỐI ĐẦU PVP: PHÒNG #${roomCode || '000000'}`}</span>
+   <span className={siegeCountdown===1?'warning':''}>
+     {gameMode==='puzzle' ? `THẾ CỜ: CÒN ${puzzleTurnsLeft} LƯỢT` : gameMode==='ai_defense' || gameMode==='campaign' ? `CÔNG THÀNH: ${siegeCountdown} HIỆP NỮA` : `ĐỐI ĐẦU PVP: PHÒNG #${roomCode || '000000'}`}
+   </span>
+ </div>
+
+ <div className="weather-hud-pill" title={WEATHER_TYPES_INFO[currentWeather].desc}>
+   <span>{WEATHER_TYPES_INFO[currentWeather].icon} {WEATHER_TYPES_INFO[currentWeather].name}</span>
+   <small>({weatherTurnsRemaining} hiệp)</small>
  </div>
  
- <button title="Đặt lại góc nhìn toàn cảnh sa bàn" onClick={()=>setViewKey(k=>k+1)}><Compass/></button><button title="Cài đặt âm thanh" onClick={()=>setActiveModal('settings')}><Settings/></button><button onClick={()=>setShowGuide(true)}><HelpCircle/></button><button onClick={()=>setScreen('lobby')}><Pause/></button><div className="avatar"><UserRound/></div></header>
+ <button title="Đặt lại góc nhìn toàn cảnh sa bàn" onClick={()=>setViewKey(k=>k+1)}><Compass/></button><button title="Cài đặt âm thanh" onClick={()=>setActiveModal('settings')}><Settings/></button><button onClick={()=>setShowGuide(true)}><HelpCircle/></button><button onClick={()=>setScreen('lobby')}><Pause/></button><div className="avatar" onClick={()=>setActiveModal('hero_detail')} style={{cursor:'pointer'}} title="Chi tiết Danh Tướng">{HEROES_DATABASE[selectedHero].avatar}</div></header>
 
  {siegeActive && (
    <div className="siege-cinematic-banner">
@@ -1208,6 +1460,17 @@ function App(){
 
    <div className="dock-divider" />
 
+   {/* NÚT THI TRIỂN KỸ NĂNG DANH TƯỚNG */}
+   <button
+     className="dock-minor hero-skill-btn"
+     disabled={momentum < (equippedArtifacts.includes('non_ba_tam') ? Math.max(1, HEROES_DATABASE[selectedHero].skillCost - 1) : HEROES_DATABASE[selectedHero].skillCost) || heroSkillCooldown > 0}
+     onClick={executeHeroSkill}
+     title={`${HEROES_DATABASE[selectedHero].skillName}: ${HEROES_DATABASE[selectedHero].skillDesc}`}
+   >
+     <span>{HEROES_DATABASE[selectedHero].skillIcon}</span>
+     <span>{heroSkillCooldown > 0 ? `HỒI (${heroSkillCooldown})` : HEROES_DATABASE[selectedHero].skillName}</span>
+   </button>
+
    <button className="dock-minor" onClick={()=>setActiveModal('tactics')} title="Mở danh sách Trận Pháp"><Sparkles/><span>TRẬN PHÁP</span></button>
    <button className="dock-minor" onClick={()=>setActiveModal('doctrines')} title="Xem Đạo Trị Quốc"><Flame/><span>ĐẠO QUỐC</span></button>
    {selected !== null && cells[selected].owner === 'player' && (
@@ -1224,6 +1487,36 @@ function App(){
  {activeModal && (
    <div className="tactical-flyout-overlay" onClick={()=>setActiveModal(null)}>
      <div className="tactical-flyout-widget" onClick={e=>e.stopPropagation()}>
+
+       {activeModal === 'hero_detail' && (
+         <>
+           <div className="flyout-header">
+             <div className="flyout-title-group">
+               <div className="flyout-badge-icon">{HEROES_DATABASE[selectedHero].avatar}</div>
+               <div>
+                 <span className="overline"><Crown size={14}/> {HEROES_DATABASE[selectedHero].title}</span>
+                 <h2>{HEROES_DATABASE[selectedHero].name}</h2>
+               </div>
+             </div>
+             <button className="flyout-close-btn" onClick={()=>setActiveModal(null)}>✕</button>
+           </div>
+           <div style={{padding:'16px 20px',display:'flex',flexDirection:'column',gap:'12px'}}>
+             <div className="hero-quote-box">"{HEROES_DATABASE[selectedHero].quote}"</div>
+             <div className="hero-skill-details">
+               <div><b>Nội tại: {HEROES_DATABASE[selectedHero].passiveName}</b> - {HEROES_DATABASE[selectedHero].passiveDesc}</div>
+               <div><b>Kỹ năng: {HEROES_DATABASE[selectedHero].skillIcon} {HEROES_DATABASE[selectedHero].skillName}</b> ({HEROES_DATABASE[selectedHero].skillCost} Thế Khí, hồi {HEROES_DATABASE[selectedHero].skillCooldown} hiệp) - {HEROES_DATABASE[selectedHero].skillDesc}</div>
+             </div>
+             <h3>Bảo Vật Trang Bị:</h3>
+             <div style={{display:'flex',gap:'10px'}}>
+               {equippedArtifacts.map(artId => (
+                 <div key={artId} style={{background:'rgba(255,255,255,0.08)',padding:'8px 12px',borderRadius:'8px',fontSize:'11.5px'}}>
+                   <b>{ARTIFACTS_DATABASE[artId].icon} {ARTIFACTS_DATABASE[artId].name}</b>: {ARTIFACTS_DATABASE[artId].statBonus}
+                 </div>
+               ))}
+             </div>
+           </div>
+         </>
+       )}
        
        {activeModal === 'tactics' && (
          <>

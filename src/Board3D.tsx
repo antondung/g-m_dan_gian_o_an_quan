@@ -7,7 +7,8 @@ import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { assetUrl, O_QUAN_ASSETS } from './game3d/assetRegistry'
 import { BOARD_LAYOUT, tilePosition, type BoardTile } from './game3d/boardLayout'
 import { TERRITORY_SPAWNS } from './game3d/territoryConfig'
-import type { TacticalTrap } from './game3d/advancedGameTypes'
+import type { TacticalTrap, WeatherType } from './game3d/advancedGameTypes'
+import { WEATHER_TYPES_INFO } from './game3d/tacticsDatabase'
 import boardBackground from '../nền bàn cờ 1.png'
 
 type Building = 'farm' | 'forest' | 'workshop' | 'barracks' | 'tower'
@@ -18,6 +19,7 @@ export type Cell = {
   owner: 'player' | 'enemy' | 'neutral';
   stars?: 1 | 2 | 3;
   spies?: number;
+  shieldTurns?: number;
 }
 
 const dynamic: Record<Building, { role: string; resource: string; action: 'work' | 'train' | 'guard' }> = {
@@ -592,6 +594,25 @@ function DanTile({
             <meshStandardMaterial color="#f5be38" metalness={0.8} roughness={0.2} emissive="#f5be38" emissiveIntensity={0.3} />
           </mesh>
           <pointLight color="#ffc107" intensity={0.8} distance={1.5} />
+        </group>
+      )}
+
+      {/* HIỂN THỊ KHIÊN BẢO VỆ DANH TƯỚNG (NẾU CÓ) */}
+      {(cell.shieldTurns || 0) > 0 && (
+        <group position={[0, 0.65, 0]}>
+          <mesh>
+            <sphereGeometry args={[1.25, 18, 18, 0, Math.PI * 2, 0, Math.PI * 0.8]} />
+            <meshStandardMaterial
+              color="#38d9a9"
+              emissive="#0ca678"
+              emissiveIntensity={0.6}
+              transparent
+              opacity={0.45}
+              side={THREE.DoubleSide}
+              depthWrite={false}
+            />
+          </mesh>
+          <pointLight color="#20c997" intensity={2} distance={3} />
         </group>
       )}
 
@@ -1590,6 +1611,7 @@ function Scene({
   ambushTarget,
   onAmbushDone,
   traps,
+  weather = 'clear',
   controlsRef,
   resetViewKey,
 }: {
@@ -1605,6 +1627,7 @@ function Scene({
   ambushTarget?: number | null
   onAmbushDone?: () => void
   traps?: TacticalTrap[]
+  weather?: WeatherType
   controlsRef?: React.RefObject<OrbitControlsImpl | null>
   resetViewKey?: number
 }) {
@@ -1628,18 +1651,31 @@ function Scene({
     }
   })
 
+  const weatherConfig = WEATHER_TYPES_INFO[weather] || WEATHER_TYPES_INFO.clear
+  const fogColor = weather === 'fog' ? '#607d8b' : weather === 'flood' ? '#1e3d59' : weather === 'drought' ? '#4a2810' : '#1c2e2a'
+  const fogFar = weather === 'fog' ? 32 : 50
+
   return (
     <>
-      {/* Rich dark teal background and fog */}
-      <fog attach="fog" args={['#1c2e2a', 28, 50]} />
+      {/* Rich atmospheric background and fog */}
+      <fog attach="fog" args={[fogColor, 20, fogFar]} />
 
-      {/* Warm Sunny Lighting with ACES ToneMapping */}
-      <ambientLight intensity={1.35} color="#fff8f0" />
-      <hemisphereLight args={['#bfe3eb', '#52402b', 1.4]} />
+      {/* Dynamic Lighting based on Weather */}
+      <ambientLight
+        intensity={1.35 * weatherConfig.ambientModifier}
+        color={weather === 'flood' ? '#d0ebff' : weather === 'drought' ? '#ffe8cc' : '#fff8f0'}
+      />
+      <hemisphereLight
+        args={[
+          weather === 'fog' ? '#90a4ae' : '#bfe3eb',
+          weather === 'drought' ? '#8d6e63' : '#52402b',
+          1.4 * weatherConfig.ambientModifier,
+        ]}
+      />
       <directionalLight
         position={[-10, 16, 8]}
-        intensity={3.4}
-        color="#fff3db"
+        intensity={3.4 * (weather === 'fog' ? 0.6 : weatherConfig.ambientModifier)}
+        color={weather === 'drought' ? '#ffcc80' : '#fff3db'}
         castShadow
         shadow-mapSize={[1024, 1024]}
         shadow-camera-left={-14}
@@ -1733,6 +1769,7 @@ export default function Board3D(props: {
   ambushTarget?: number | null
   onAmbushDone?: () => void
   traps?: TacticalTrap[]
+  weather?: WeatherType
   controlsRef?: React.RefObject<OrbitControlsImpl | null>
   resetViewKey?: number
 }) {

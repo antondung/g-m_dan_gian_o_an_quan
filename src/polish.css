@@ -399,15 +399,45 @@ html body main.battle.screen .command-dock{
   box-shadow: 0 0 10px rgba(255, 183, 121, 0.3);
 }
 
-/* MAIN LOBBY STAGE (GRAND CENTRAL BANNER & SIDE PANELS) */
-.lobby-stage {
-  position: relative;
-  z-index: 10;
-  display: grid;
-  grid-template-columns: 280px 1fr 300px;
-  gap: 24px;
-  padding: 20px 32px;
-  overflow: hidden;
+/* WEATHER PILL & HERO SKILL BUTTON */
+.weather-hud-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 183, 121, 0.4);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #fce8cc;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.weather-hud-pill small {
+  color: #ffb779;
+  font-size: 9.5px;
+}
+
+.hero-skill-btn {
+  background: linear-gradient(135deg, rgba(140, 51, 15, 0.85) 0%, rgba(65, 20, 10, 0.95) 100%) !important;
+  border-color: #ffb779 !important;
+  color: #ffd048 !important;
+  box-shadow: 0 0 12px rgba(255, 183, 121, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-skill-btn:not(:disabled):hover {
+  background: linear-gradient(135deg, #b5241a 0%, #8c330f 100%) !important;
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 6px 18px rgba(255, 183, 121, 0.6);
+}
+
+.hero-skill-btn:disabled {
+  opacity: 0.5;
+  filter: grayscale(0.8);
 }
 
 /* LEFT PANEL: QUESTS & CITADEL STATUS */
