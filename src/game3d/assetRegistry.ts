@@ -1,5 +1,6 @@
 // All production GLBs in this folder are normalized to Three.js Y-up coordinates.
-export const O_QUAN_ASSET_BASE = '/assets/o-quan-dung-nuoc'
+const BASE = import.meta.env.BASE_URL || '/'
+export const O_QUAN_ASSET_BASE = `${BASE.replace(/\/$/, '')}/assets/o-quan-dung-nuoc`
 export const O_QUAN_ASSETS = {
   board: { rice:'01_O_RuongLua.glb', bamboo:'02_O_RungTre.glb', woodshop:'03_O_XuongMoc.glb', camp:'04_O_DoanhTrai.glb', watchtower:'05_O_ThapCanh.glb', greatCity:'06_O_Quan_DaiThanh.glb', enemyCity:'07_O_Quan_DichThanh.glb' },
   buildings: { farmerHouse:'08_NhaNongDan.glb', warehouse:'09_NhaKho.glb', forge:'10_LoLuyen.glb', training:'11_TraiHuanLuyen.glb' },
