@@ -995,7 +995,7 @@ function App(){
        </div>
      </section>
      <div className="landing-board">
-       <Board3D cells={DEFAULT_CELLS} selected={null} onSelect={()=>{}} isLanding={true}/>
+       <Board3D cells={DEFAULT_CELLS} selected={null} onSelect={()=>{}}/>
      </div>
      <div className="landing-flags" aria-hidden="true"><i/><i/><i/></div>
      <section className="landing-features">
@@ -1134,7 +1134,7 @@ function App(){
 
  if(screen==='profile') return (
    <div className="profile-screen screen">
-     <div className="profile-backdrop"><Board3D cells={DEFAULT_CELLS} selected={null} onSelect={()=>{}} isLanding={true}/></div>
+     <div className="profile-backdrop"><Board3D cells={DEFAULT_CELLS} selected={null} onSelect={()=>{}}/></div>
      <button className="back-link" onClick={()=>setScreen('landing')}><ArrowLeft/> TRỞ VỀ</button>
      <div className="profile-card ornamental">
        <div className="mini-seal">御</div>
@@ -1179,7 +1179,7 @@ function App(){
 
  if(screen==='pvp_lobby') return (
    <div className="pvp-lobby-screen screen">
-     <div className="profile-backdrop"><Board3D cells={DEFAULT_CELLS} selected={null} onSelect={()=>{}} isLanding={true}/></div>
+     <div className="profile-backdrop"><Board3D cells={DEFAULT_CELLS} selected={null} onSelect={()=>{}}/></div>
      <button className="back-link" onClick={()=>setScreen('lobby')}><ArrowLeft/> TRỞ VỀ ĐẠI SẢNH</button>
      
      <div className="pvp-lobby-card ornamental">
@@ -1214,7 +1214,7 @@ function App(){
 
  if(screen==='ranked_matchmaking') return (
    <div className="matchmaking-screen screen">
-     <div className="profile-backdrop"><Board3D cells={DEFAULT_CELLS} selected={null} onSelect={()=>{}} isLanding={true}/></div>
+     <div className="profile-backdrop"><Board3D cells={DEFAULT_CELLS} selected={null} onSelect={()=>{}}/></div>
      <div className="matchmaking-modal ornamental">
        <div className="radar-spinner"/>
        <span className="overline">HỆ THỐNG GHÉP ĐẤU TOÀN QUỐC</span>

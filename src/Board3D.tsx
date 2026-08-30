@@ -1772,7 +1772,6 @@ export default function Board3D(props: {
   weather?: WeatherType
   controlsRef?: React.RefObject<OrbitControlsImpl | null>
   resetViewKey?: number
-  isLanding?: boolean
 }) {
   const localControlsRef = useRef<OrbitControlsImpl | null>(null)
   const effectiveRef = props.controlsRef || localControlsRef
@@ -1783,7 +1782,7 @@ export default function Board3D(props: {
       shadows
       dpr={1}
       style={{
-        backgroundImage: props.isLanding ? 'none' : `url("${boardBackground}")`,
+        backgroundImage: `url("${boardBackground}")`,
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
